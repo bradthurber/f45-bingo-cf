@@ -1,4 +1,4 @@
-const API_BASE = ""; // set to Worker URL if different origin
+const API_BASE = "https://f45-bingo.f45-bingo.workers.dev";
 const POLL_MS = 10000;
 const TOP_N = 10;
 

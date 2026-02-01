@@ -1,4 +1,4 @@
-const API_BASE = "http://localhost:8787"; // local dev Worker
+const API_BASE = "https://f45-bingo.f45-bingo.workers.dev";
 const STUDIO_CODE = ""; // optional
 
 const NAME_KEY = "bingo_display_name";
