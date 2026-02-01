@@ -1,57 +1,112 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>F45 Bingo</title>
-    <link rel="stylesheet" href="styles.css" />
-  </head>
-  <body>
-    <main class="wrap">
-      <h1>F45 Bingo Ticket Counter</h1>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>F45 Bingo</title>
 
-      <div class="row">
-        <label class="lbl">Display name</label>
-        <input id="displayName" class="input" placeholder="Your name" />
-      </div>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
 
-      <div class="row">
-        <label class="lbl">Scan paper card (optional)</label>
-        <input id="photo" type="file" accept="image/*" capture="environment" />
-        <div class="hint">Tip: fill most of the frame, avoid glare.</div>
-      </div>
+  <div class="container">
 
-      <div id="scanStatus" class="status"></div>
+    <h1>F45 Bingo</h1>
 
-      <div id="grid" class="grid"></div>
+    <!-- Week selector -->
+    <div class="row">
+      <label class="lbl">Week</label>
+      <select id="weekSelect" class="input">
+        <option value="week1">Week 1</option>
+        <option value="week2">Week 2</option>
+        <option value="week3">Week 3</option>
+        <option value="week4">Week 4</option>
+        <option value="week5">Week 5</option>
+        <option value="week6">Week 6</option>
+        <option value="week7">Week 7</option>
+        <option value="week8">Week 8</option>
+      </select>
+      <div class="hint">Select the week you are tracking.</div>
+    </div>
 
-      <div class="card">
-        <div>Marked squares: <span id="markedCount">0</span></div>
-        <div>Bingos: <span id="bingoCount">0</span></div>
-        <div>Full card: <span id="fullCard">no</span></div>
-        <div class="total">Total tickets: <span id="ticketsTotal">0</span></div>
-      </div>
+    <!-- Display name -->
+    <div class="row">
+      <label class="lbl">Your name</label>
+      <input
+        id="displayName"
+        class="input"
+        type="text"
+        placeholder="Enter your name"
+        autocomplete="off"
+      />
+    </div>
 
-      <div class="row">
-        <button id="submitBtn" class="btn">Submit to leaderboard</button>
-      </div>
+    <!-- Bingo grid -->
+    <div class="grid" id="bingoGrid">
+      <!-- 25 cells -->
+      <div class="cell">1</div>
+      <div class="cell">2</div>
+      <div class="cell">3</div>
+      <div class="cell">4</div>
+      <div class="cell">5</div>
 
-      <div class="row linkrow">
-        <a href="tv.html">TV mode</a>
-      </div>
+      <div class="cell">6</div>
+      <div class="cell">7</div>
+      <div class="cell">8</div>
+      <div class="cell">9</div>
+      <div class="cell">10</div>
 
-      <h2>Leaderboard</h2>
-      <div class="row">
-        <button id="refreshBtn" class="btn2">Refresh</button>
-      </div>
+      <div class="cell">11</div>
+      <div class="cell">12</div>
+      <div class="cell">13</div>
+      <div class="cell">14</div>
+      <div class="cell">15</div>
 
-      <div id="leaderboard" class="leaderboard"></div>
+      <div class="cell">16</div>
+      <div class="cell">17</div>
+      <div class="cell">18</div>
+      <div class="cell">19</div>
+      <div class="cell">20</div>
 
-      <div class="fineprint">
-        Unofficial community tool. Honor system. No photos stored.
-      </div>
-    </main>
+      <div class="cell">21</div>
+      <div class="cell">22</div>
+      <div class="cell">23</div>
+      <div class="cell">24</div>
+      <div class="cell">25</div>
+    </div>
 
-    <script src="app.js"></script>
-  </body>
+    <!-- Tickets -->
+    <div class="tickets">
+      Tickets earned:
+      <span id="ticketCount">0</span>
+    </div>
+
+    <!-- Actions -->
+    <div class="actions">
+      <button id="submitBtn">Submit</button>
+
+      <label class="scan">
+        Scan card
+        <input id="scanInput" type="file" accept="image/*" />
+      </label>
+    </div>
+
+    <!-- Leaderboard -->
+    <h2>Leaderboard</h2>
+    <table class="leaderboard">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Tickets</th>
+        </tr>
+      </thead>
+      <tbody id="leaderboardBody">
+        <!-- rows injected by JS -->
+      </tbody>
+    </table>
+
+  </div>
+
+  <script src="app.js"></script>
+</body>
 </html>
