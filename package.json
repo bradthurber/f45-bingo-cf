@@ -1,0 +1,10 @@
+{
+  "name": "f45-bingo-cf",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev:worker": "npx wrangler dev",
+    "deploy:worker": "npx wrangler deploy",
+    "d1:apply": "npx wrangler d1 execute f45-bingo --file=worker/schema.sql"
+  }
+}

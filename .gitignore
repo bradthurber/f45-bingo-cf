@@ -1,0 +1,13 @@
+# dependencies
+node_modules/
+
+# cloudflare local state
+.wrangler/
+
+# local dev secrets
+.dev.vars
+
+# OS/editor noise
+.DS_Store
+*.swp
+*.swo

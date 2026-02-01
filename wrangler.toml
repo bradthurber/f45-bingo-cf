@@ -1,0 +1,14 @@
+name = "f45-bingo"
+main = "worker/index.js"
+compatibility_date = "2026-02-01"
+
+[vars]
+SCANNING_ENABLED = "true"
+OPENAI_MODEL = "gpt-4.1-mini"
+MAX_IMAGE_BYTES = "6000000"
+# STUDIO_CODE is a secret (set via wrangler secret put)
+
+[[d1_databases]]
+binding = "DB"
+database_name = "f45-bingo"
+database_id = "4b9de60b-8db2-478b-aa89-d528d515d4a6"
