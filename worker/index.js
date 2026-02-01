@@ -7,10 +7,19 @@ class RateLimitError extends Error {
 
 export default {
   async fetch(request, env) {
-    if (request.method === "OPTIONS") return corsPreflight();
+    if (request.method === "OPTIONS") {
+  return new Response(null, { status: 204, headers: corsHeaders() });
+}
 
     try {
       const url = new URL(request.url);
+
+      if (url.pathname === "/api/geo" && request.method === "GET") {
+        return json({
+          ip: request.headers.get("CF-Connecting-IP") || null,
+          cf: request.cf || null
+        });
+      }
 
       if (url.pathname === "/api/leaderboard" && request.method === "GET") {
         return await handleLeaderboard(env, url);
@@ -42,10 +51,11 @@ function corsPreflight() {
 function corsHeaders() {
   return {
     "access-control-allow-origin": "*",
-    "access-control-allow-headers": "content-type,x-device-id,x-studio-code",
-    "access-control-allow-methods": "GET,POST,OPTIONS"
+    "access-control-allow-methods": "GET,POST,OPTIONS",
+    "access-control-allow-headers": "content-type,x-device-id,x-studio-code"
   };
 }
+
 
 function json(obj, status = 200) {
   return new Response(JSON.stringify(obj), {
