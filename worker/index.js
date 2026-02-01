@@ -8,8 +8,8 @@ class RateLimitError extends Error {
 export default {
   async fetch(request, env) {
     if (request.method === "OPTIONS") {
-  return new Response(null, { status: 204, headers: corsHeaders() });
-}
+      return new Response(null, { status: 204, headers: corsHeaders() });
+    }
 
     try {
       const url = new URL(request.url);
@@ -71,21 +71,35 @@ function json(obj, status = 200) {
 // NOTE: in local dev, Cloudflare geo fields are often empty.
 // Set ALLOW_ALL_GEO=true in .dev.vars to bypass in dev only.
 function enforceIndianaOnly(request, env) {
+  // Dev bypass if you ever enable it later
   if (env && env.ALLOW_ALL_GEO === "true") return null;
 
   const cf = request.cf || {};
-  const country = cf.country || "";
-  const region = cf.region || "";
+  const country = String(cf.country || "").toUpperCase();
+  const regionCode = String(cf.regionCode || "").toUpperCase();
+  const region = String(cf.region || "");
 
-  if (country !== "US" || region !== "IN") {
+  const isIndiana =
+    (country === "US" && regionCode === "IN") ||
+    (country === "US" && region.toLowerCase() === "indiana");
+
+  if (!isIndiana) {
     return json(
       {
         error: "geo_blocked",
-        message: "This tool is only available to Indiana users."
+        message: "This tool is only available to Indiana users.",
+        // TEMP DEBUG: remove once confirmed
+        debug: {
+          country: cf.country || null,
+          region: cf.region || null,
+          regionCode: cf.regionCode || null,
+          colo: cf.colo || null
+        }
       },
       403
     );
   }
+
   return null;
 }
 
