@@ -1,0 +1,57 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>F45 Bingo - TV</title>
+    <link rel="stylesheet" href="tv.css" />
+  </head>
+  <body>
+    <main class="tv">
+      <header class="top">
+        <div class="title">
+          <div class="h1">F45 Bingo Leaderboard</div>
+          <div class="sub">
+            Week <span id="weekId"></span>
+            <span class="dot">•</span>
+            Updated <span id="lastUpdated">--</span>
+          </div>
+        </div>
+
+        <div class="qrbox">
+          <div class="qrlabel">Scan to join</div>
+          <img id="qrImg" class="qr" alt="QR code" />
+          <div id="joinUrl" class="joinurl"></div>
+        </div>
+      </header>
+
+      <section class="grid">
+        <div class="panel">
+          <div class="panelTitle">Top 10</div>
+          <div id="rows" class="rows"></div>
+        </div>
+
+        <div class="panel right">
+          <div class="panelTitle">How it works</div>
+          <div class="rules">
+            <div class="rule"><span class="k">+1</span> per marked square</div>
+            <div class="rule"><span class="k">+3</span> per bingo line</div>
+            <div class="rule"><span class="k">+5</span> full card</div>
+            <div class="rule small">Diagonals count. Honor system.</div>
+          </div>
+
+          <div class="tickerBox">
+            <div class="panelTitle">Recent</div>
+            <div id="ticker" class="ticker">Waiting for updates...</div>
+          </div>
+
+          <div class="footerHint">
+            Tip: run this URL in a kiosk browser on a TV device.
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <script src="tv.js"></script>
+  </body>
+</html>

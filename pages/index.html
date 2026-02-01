@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>F45 Bingo</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="wrap">
+      <h1>F45 Bingo Ticket Counter</h1>
+
+      <div class="row">
+        <label class="lbl">Display name</label>
+        <input id="displayName" class="input" placeholder="Your name" />
+      </div>
+
+      <div class="row">
+        <label class="lbl">Scan paper card (optional)</label>
+        <input id="photo" type="file" accept="image/*" capture="environment" />
+        <div class="hint">Tip: fill most of the frame, avoid glare.</div>
+      </div>
+
+      <div id="scanStatus" class="status"></div>
+
+      <div id="grid" class="grid"></div>
+
+      <div class="card">
+        <div>Marked squares: <span id="markedCount">0</span></div>
+        <div>Bingos: <span id="bingoCount">0</span></div>
+        <div>Full card: <span id="fullCard">no</span></div>
+        <div class="total">Total tickets: <span id="ticketsTotal">0</span></div>
+      </div>
+
+      <div class="row">
+        <button id="submitBtn" class="btn">Submit to leaderboard</button>
+      </div>
+
+      <div class="row linkrow">
+        <a href="tv.html">TV mode</a>
+      </div>
+
+      <h2>Leaderboard</h2>
+      <div class="row">
+        <button id="refreshBtn" class="btn2">Refresh</button>
+      </div>
+
+      <div id="leaderboard" class="leaderboard"></div>
+
+      <div class="fineprint">
+        Unofficial community tool. Honor system. No photos stored.
+      </div>
+    </main>
+
+    <script src="app.js"></script>
+  </body>
+</html>
