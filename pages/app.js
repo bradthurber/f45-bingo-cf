@@ -1,6 +1,7 @@
 const API_BASE = "https://f45-bingo.f45-bingo.workers.dev";
 const STUDIO_CODE = ""; // optional
 
+
 const NAME_KEY = "bingo_display_name";
 const DEVICE_KEY = "bingo_device_id";
 const MASK_KEY_PREFIX = "bingo_mask_";
