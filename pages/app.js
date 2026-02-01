@@ -7,6 +7,7 @@ const API_BASE = "https://f45-bingo.f45-bingo.workers.dev";
 const LS_NAME = "f45_display_name";
 const LS_MASK = "f45_marked_mask";
 const LS_WEEK = "f45_week_id";
+const LS_DEVICE = "f45_device_id";
 
 /* ===========================
    STATE
@@ -26,6 +27,16 @@ function corsJson(res) {
   if (!res.ok) throw new Error(`HTTP ${res.status}`);
   return res.json();
 }
+
+function getDeviceId() {
+  let id = localStorage.getItem(LS_DEVICE);
+  if (!id) {
+    id = (crypto.randomUUID ? crypto.randomUUID() : `${Date.now()}-${Math.random()}`);
+    localStorage.setItem(LS_DEVICE, id);
+  }
+  return id;
+}
+
 
 /* ===========================
    WEEK HANDLING
@@ -164,8 +175,10 @@ async function scanImage(file) {
 
   const res = await fetch(`${API_BASE}/api/scan`, {
     method: "POST",
+    headers: { "x-device-id": getDeviceId() },
     body: fd
   });
+
 
   const data = await corsJson(res);
 
