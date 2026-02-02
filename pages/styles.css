@@ -60,7 +60,7 @@ h1, h2 {
   cursor: pointer;
 }
 
-.cell.on {
+.cell.marked {
   background: #111;
   color: #fff;
   border-color: #111;
