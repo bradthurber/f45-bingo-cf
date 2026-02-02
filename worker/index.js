@@ -215,12 +215,14 @@ async function handleScan(request, env) {
   const prompt =
     "You are given a photo of a paper bingo card. " +
     "The card contains a 5x5 grid of squares. " +
-    "Ignore all printed text and titles. " +
-    "Your ONLY task is to detect which grid cells contain a handwritten mark such as an X, checkmark, scribble, or filled mark. " +
-    "Assume marks are inside cells, not on grid lines. " +
+    "Ignore all printed text, titles, logos, cell borders, and shadows. " +
+    "Your ONLY task is to detect which grid cells contain a clear handwritten mark such as an X, checkmark, or filled/scribbled area. " +
+    "Be CONSERVATIVE: only report marks you are confident about. " +
+    "If a cell has no obvious handwritten mark, do NOT include it. " +
+    "Shadows, glare, printing artifacts, and smudges are NOT marks. " +
+    "If the card appears blank or you see no clear marks, return an empty marked_cells array. " +
     "Return JSON only with schema: { marked_cells: [{r:0..4,c:0..4}], confidence: 0..1, notes: string }. " +
     "Use 0-based row and column indices with top-left as r=0,c=0. " +
-    "If uncertain due to glare/blur/angle, still guess and mention uncertainty in notes. " +
     "Do not include any extra keys.";
 
   const openaiResp = await fetch("https://api.openai.com/v1/responses", {
