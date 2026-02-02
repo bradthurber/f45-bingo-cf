@@ -261,3 +261,27 @@ select.input {
 .leaderboard tbody tr:first-child td {
   border-top: none;
 }
+
+.delete-section {
+  margin-top: 32px;
+  padding-top: 24px;
+  border-top: 1px solid #3d2d7a;
+  text-align: center;
+}
+
+.delete-btn {
+  background: transparent;
+  border: 1px solid #3d2d7a;
+  color: #a99fc4;
+  padding: 12px 20px;
+  font-size: 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.delete-btn:active {
+  background: rgba(239, 68, 68, 0.2);
+  border-color: #ef4444;
+  color: #ef4444;
+}

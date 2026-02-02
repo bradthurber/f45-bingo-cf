@@ -247,6 +247,40 @@ async function submitBoard() {
   }
 }
 
+async function deleteSubmission() {
+  if (!currentWeek) {
+    alert("No week selected. Scan your card first.");
+    return;
+  }
+
+  if (!confirm("Remove yourself from the leaderboard for this week?")) {
+    return;
+  }
+
+  try {
+    const res = await fetch(`${API_BASE}/api/delete`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "x-device-id": getDeviceId()
+      },
+      body: JSON.stringify({ week_id: currentWeek })
+    });
+
+    await corsJson(res);
+
+    // Clear local state
+    clearGridMarks();
+    renderGrid();
+    renderTickets();
+    await refreshLeaderboard();
+
+    alert("You have been removed from the leaderboard.");
+  } catch (err) {
+    alert("Failed to remove. Please try again.");
+  }
+}
+
 async function refreshLeaderboard() {
   if (!currentWeek) {
     qs("leaderboardBody").innerHTML = "";
@@ -374,6 +408,8 @@ window.addEventListener("DOMContentLoaded", () => {
   qs("scanInput").addEventListener("change", e => {
     if (e.target.files[0]) scanImage(e.target.files[0]);
   });
+
+  qs("deleteBtn").addEventListener("click", deleteSubmission);
 
   renderGrid();
   renderTickets();

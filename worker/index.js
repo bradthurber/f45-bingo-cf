@@ -39,6 +39,9 @@ export default {
       if (url.pathname === "/api/stats" && request.method === "GET") {
         return await handleStats(env, url);
       }
+      if (url.pathname === "/api/delete" && request.method === "POST") {
+        return await handleDelete(request, env);
+      }
 
       return json({ error: "not_found" }, 404);
     } catch (e) {
@@ -457,6 +460,22 @@ async function handleStats(env, url) {
     total_submissions: totalSubmissions,
     cells
   });
+}
+
+async function handleDelete(request, env) {
+  const deviceId = request.headers.get("x-device-id") || "";
+  if (!deviceId) return json({ error: "missing_device_id" }, 400);
+
+  const body = await request.json();
+  const weekId = safeText(body.week_id, 32);
+
+  if (!weekId) return json({ error: "missing_week_id" }, 400);
+
+  await env.DB.prepare(
+    "DELETE FROM submissions WHERE week_id = ? AND device_id = ?"
+  ).bind(weekId, deviceId).run();
+
+  return json({ ok: true, week_id: weekId });
 }
 
 async function enforceRateLimit(env, key, windowSeconds, limit) {
