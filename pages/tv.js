@@ -9,7 +9,7 @@ const elTicker = document.getElementById("ticker");
 const elQr = document.getElementById("qrImg");
 const elJoin = document.getElementById("joinUrl");
 
-let weekId = getWeekFromUrl() || "week1";
+let weekId = getWeekFromUrl() || getCurrentChallengeWeek();
 let lastSnapshot = new Map();
 let lastLeader = null;
 let lastTickMsg = "Waiting for updates...";
@@ -138,6 +138,33 @@ function escapeHtml(s) {
 function getWeekFromUrl() {
   const params = new URLSearchParams(location.search);
   return params.get("week");
+}
+
+function getCurrentChallengeWeek() {
+  // 2026 Challenge Schedule:
+  // Week 1: Feb 2-7, Week 2: Feb 9-14, Week 3: Feb 16-21
+  // Week 4: Feb 23-28, Week 5: Mar 2-7, Week 6: Mar 9-14
+  const schedule = [
+    { week: "week1", start: new Date(2026, 1, 2), end: new Date(2026, 1, 7) },
+    { week: "week2", start: new Date(2026, 1, 9), end: new Date(2026, 1, 14) },
+    { week: "week3", start: new Date(2026, 1, 16), end: new Date(2026, 1, 21) },
+    { week: "week4", start: new Date(2026, 1, 23), end: new Date(2026, 1, 28) },
+    { week: "week5", start: new Date(2026, 2, 2), end: new Date(2026, 2, 7) },
+    { week: "week6", start: new Date(2026, 2, 9), end: new Date(2026, 2, 14) },
+  ];
+
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
+  for (const { week, start, end } of schedule) {
+    if (today >= start && today <= end) {
+      return week;
+    }
+  }
+
+  // If before challenge, show week1; if after, show week6
+  if (today < schedule[0].start) return "week1";
+  return "week6";
 }
 
 function formatWeekDisplay(weekId) {
