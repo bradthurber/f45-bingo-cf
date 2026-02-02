@@ -1,19 +1,20 @@
 :root {
-  --bg: #0b1020;
-  --panel: rgba(255,255,255,0.06);
-  --panel2: rgba(255,255,255,0.08);
-  --border: rgba(255,255,255,0.10);
+  --bg: #0f0b1a;
+  --panel: rgba(33, 21, 81, 0.6);
+  --panel2: rgba(33, 21, 81, 0.8);
+  --border: rgba(247, 209, 14, 0.15);
   --text: rgba(255,255,255,0.92);
   --muted: rgba(255,255,255,0.70);
   --muted2: rgba(255,255,255,0.55);
-  --accent: #67e8f9;
+  --accent: #f7d10e;
+  --purple: #211551;
 }
 
 * { box-sizing: border-box; }
 body {
   margin: 0;
   font-family: system-ui, sans-serif;
-  background: radial-gradient(1200px 800px at 20% 10%, #142049 0%, var(--bg) 60%);
+  background: radial-gradient(1200px 800px at 20% 10%, #2d1f6b 0%, var(--bg) 60%);
   color: var(--text);
 }
 
@@ -26,7 +27,7 @@ body {
   align-items: start;
 }
 
-.h1 { font-size: 44px; font-weight: 900; letter-spacing: 0.2px; }
+.h1 { font-size: 44px; font-weight: 900; letter-spacing: 0.2px; color: var(--accent); }
 .sub { font-size: 16px; color: var(--muted); margin-top: 8px; }
 .dot { margin: 0 10px; color: var(--muted2); }
 
@@ -85,8 +86,9 @@ body {
   align-items: center;
   padding: 14px 14px;
   border-radius: 14px;
-  border: 1px solid rgba(255,255,255,0.10);
-  background: rgba(0,0,0,0.18);
+  border: 1px solid rgba(247, 209, 14, 0.1);
+  background: rgba(33, 21, 81, 0.5);
+  transition: all 0.3s ease;
 }
 
 .rank { font-size: 26px; font-weight: 900; color: rgba(255,255,255,0.88); }
@@ -94,12 +96,41 @@ body {
 .meta { font-size: 14px; color: var(--muted); margin-top: 2px; }
 .score { text-align: right; font-size: 34px; font-weight: 1000; color: var(--accent); }
 
-.row.newLeader { outline: 3px solid rgba(103,232,249,0.35); }
-.row.changed { animation: pulse 1.2s ease-in-out 1; }
+/* First place special styling */
+.row:first-child {
+  background: linear-gradient(135deg, rgba(247, 209, 14, 0.15) 0%, rgba(33, 21, 81, 0.6) 100%);
+  border-color: rgba(247, 209, 14, 0.3);
+}
+
+.row:first-child .rank {
+  color: var(--accent);
+}
+
+/* New leader animation */
+.row.newLeader {
+  animation: newLeader 2s ease-in-out;
+  border-color: var(--accent);
+  box-shadow: 0 0 30px rgba(247, 209, 14, 0.4);
+}
+
+@keyframes newLeader {
+  0% { transform: scale(1); box-shadow: 0 0 0 rgba(247, 209, 14, 0); }
+  15% { transform: scale(1.03); box-shadow: 0 0 50px rgba(247, 209, 14, 0.6); }
+  30% { transform: scale(1.01); box-shadow: 0 0 30px rgba(247, 209, 14, 0.4); }
+  45% { transform: scale(1.02); box-shadow: 0 0 40px rgba(247, 209, 14, 0.5); }
+  100% { transform: scale(1); box-shadow: 0 0 30px rgba(247, 209, 14, 0.4); }
+}
+
+/* Score changed animation */
+.row.changed {
+  animation: pulse 1.5s ease-in-out;
+}
+
 @keyframes pulse {
-  0% { transform: scale(1.00); background: rgba(103,232,249,0.10); }
-  55% { transform: scale(1.015); background: rgba(103,232,249,0.18); }
-  100% { transform: scale(1.00); background: rgba(0,0,0,0.18); }
+  0% { transform: scale(1); background: rgba(33, 21, 81, 0.5); }
+  25% { transform: scale(1.02); background: rgba(247, 209, 14, 0.2); }
+  50% { transform: scale(1.01); background: rgba(247, 209, 14, 0.15); }
+  100% { transform: scale(1); background: rgba(33, 21, 81, 0.5); }
 }
 
 .rules { display: grid; gap: 10px; margin-bottom: 14px; }
@@ -117,12 +148,24 @@ body {
   font-size: 18px;
   padding: 14px;
   border-radius: 14px;
-  border: 1px solid rgba(255,255,255,0.10);
-  background: rgba(0,0,0,0.14);
+  border: 1px solid rgba(247, 209, 14, 0.15);
+  background: rgba(33, 21, 81, 0.4);
   color: rgba(255,255,255,0.88);
   min-height: 62px;
   display: flex;
   align-items: center;
+  transition: all 0.3s ease;
+}
+
+.ticker.excited {
+  background: rgba(247, 209, 14, 0.15);
+  border-color: rgba(247, 209, 14, 0.4);
+  animation: tickerPulse 0.5s ease-in-out 3;
+}
+
+@keyframes tickerPulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.02); }
 }
 
 .footerHint {

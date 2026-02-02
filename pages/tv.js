@@ -75,6 +75,9 @@ function render(rows) {
   if (tick) {
     lastTickMsg = tick;
     elTicker.textContent = tick;
+    // Add excitement animation
+    elTicker.classList.add("excited");
+    setTimeout(() => elTicker.classList.remove("excited"), 2000);
   } else {
     elTicker.textContent = lastTickMsg;
   }
