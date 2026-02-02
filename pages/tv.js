@@ -151,7 +151,7 @@ function computeJoinUrl() {
 
 function makeQrUrl(targetUrl) {
   const encoded = encodeURIComponent(targetUrl);
-  return `https://chart.googleapis.com/chart?cht=qr&chs=220x220&chl=${encoded}`;
+  return `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encoded}`;
 }
 
 function API(path) {
