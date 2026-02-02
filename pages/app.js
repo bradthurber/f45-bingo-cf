@@ -158,11 +158,48 @@ function renderGrid() {
 }
 
 function countTickets() {
-  let count = 0;
+  let markedCount = 0;
   for (let i = 0; i < 25; i++) {
-    if (isMarked(i)) count++;
+    if (isMarked(i)) markedCount++;
   }
-  return count;
+
+  // Count bingo lines (rows, columns, diagonals)
+  let bingoCount = 0;
+
+  // Rows
+  for (let r = 0; r < 5; r++) {
+    let complete = true;
+    for (let c = 0; c < 5; c++) {
+      if (!isMarked(r * 5 + c)) { complete = false; break; }
+    }
+    if (complete) bingoCount++;
+  }
+
+  // Columns
+  for (let c = 0; c < 5; c++) {
+    let complete = true;
+    for (let r = 0; r < 5; r++) {
+      if (!isMarked(r * 5 + c)) { complete = false; break; }
+    }
+    if (complete) bingoCount++;
+  }
+
+  // Diagonal top-left to bottom-right
+  let diag1 = true;
+  for (let i = 0; i < 5; i++) {
+    if (!isMarked(i * 5 + i)) { diag1 = false; break; }
+  }
+  if (diag1) bingoCount++;
+
+  // Diagonal top-right to bottom-left
+  let diag2 = true;
+  for (let i = 0; i < 5; i++) {
+    if (!isMarked(i * 5 + (4 - i))) { diag2 = false; break; }
+  }
+  if (diag2) bingoCount++;
+
+  const fullCard = markedCount === 25;
+  return markedCount + (bingoCount * 3) + (fullCard ? 5 : 0);
 }
 
 function renderTickets() {
