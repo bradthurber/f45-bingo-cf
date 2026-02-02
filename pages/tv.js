@@ -8,6 +8,8 @@ const elRows = document.getElementById("rows");
 const elTicker = document.getElementById("ticker");
 const elQr = document.getElementById("qrImg");
 const elJoin = document.getElementById("joinUrl");
+const elEasiest = document.getElementById("easiest");
+const elHardest = document.getElementById("hardest");
 
 let weekId = getWeekFromUrl() || getCurrentChallengeWeek();
 let lastSnapshot = new Map();
@@ -31,18 +33,56 @@ function init() {
 
 async function pollOnce() {
   try {
-    const resp = await fetch(API(`${API_BASE}/api/leaderboard?week=${encodeURIComponent(weekId)}`), { cache: "no-store" });
-    const data = await resp.json();
+    const [leaderResp, statsResp] = await Promise.all([
+      fetch(API(`${API_BASE}/api/leaderboard?week=${encodeURIComponent(weekId)}`), { cache: "no-store" }),
+      fetch(API(`${API_BASE}/api/stats?week=${encodeURIComponent(weekId)}`), { cache: "no-store" })
+    ]);
 
-    if (!resp.ok) throw new Error(data.error || String(resp.status));
+    const leaderData = await leaderResp.json();
+    if (!leaderResp.ok) throw new Error(leaderData.error || String(leaderResp.status));
 
-    const rows = Array.isArray(data.rows) ? data.rows.slice(0, TOP_N) : [];
+    const rows = Array.isArray(leaderData.rows) ? leaderData.rows.slice(0, TOP_N) : [];
     render(rows);
+
+    if (statsResp.ok) {
+      const statsData = await statsResp.json();
+      renderStats(statsData);
+    }
+
     elLast.textContent = new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
   } catch {
     elLast.textContent = "offline";
     elTicker.textContent = "Network issue. Retrying...";
   }
+}
+
+function renderStats(data) {
+  if (!data.cells || data.total_submissions === 0) {
+    elEasiest.innerHTML = '<div class="statItem muted">No data yet</div>';
+    elHardest.innerHTML = '<div class="statItem muted">No data yet</div>';
+    return;
+  }
+
+  // Sort by percentage
+  const sorted = [...data.cells].filter(c => c.label).sort((a, b) => b.pct - a.pct);
+
+  // Top 3 easiest (highest completion)
+  const easiest = sorted.slice(0, 3);
+  elEasiest.innerHTML = easiest.map(c => `
+    <div class="statItem">
+      <span class="statPct">${c.pct}%</span>
+      <span class="statLabel">${escapeHtml(c.label)}</span>
+    </div>
+  `).join("");
+
+  // Top 3 hardest (lowest completion, but must have label)
+  const hardest = sorted.slice(-3).reverse();
+  elHardest.innerHTML = hardest.map(c => `
+    <div class="statItem">
+      <span class="statPct">${c.pct}%</span>
+      <span class="statLabel">${escapeHtml(c.label)}</span>
+    </div>
+  `).join("");
 }
 
 function render(rows) {

@@ -36,6 +36,9 @@ export default {
       if (url.pathname === "/api/card" && request.method === "GET") {
         return await handleGetCard(env, url);
       }
+      if (url.pathname === "/api/stats" && request.method === "GET") {
+        return await handleStats(env, url);
+      }
 
       return json({ error: "not_found" }, 404);
     } catch (e) {
@@ -401,6 +404,59 @@ async function handleGetCard(env, url) {
   }
 
   return json({ week_id: row.week_id, cells });
+}
+
+async function handleStats(env, url) {
+  const week = (url.searchParams.get("week") || "").trim();
+  if (!week) return json({ error: "missing_week" }, 400);
+
+  // Get all submissions for this week
+  const submissions = await env.DB.prepare(
+    "SELECT marked_mask FROM submissions WHERE week_id = ?"
+  ).bind(week).all();
+
+  const rows = submissions.results || [];
+  const totalSubmissions = rows.length;
+
+  // Count how many times each cell is marked
+  const cellCounts = new Array(25).fill(0);
+
+  for (const row of rows) {
+    const mask = parseMaskBigInt(row.marked_mask);
+    if (mask === null) continue;
+
+    for (let i = 0; i < 25; i++) {
+      if ((mask & (1n << BigInt(i))) !== 0n) {
+        cellCounts[i]++;
+      }
+    }
+  }
+
+  // Get card definition for cell labels
+  let cellLabels = null;
+  const cardRow = await env.DB.prepare(
+    "SELECT cells_json FROM card_definitions WHERE week_id = ?"
+  ).bind(week).first();
+
+  if (cardRow) {
+    try {
+      cellLabels = JSON.parse(cardRow.cells_json);
+    } catch {}
+  }
+
+  // Build response with counts and percentages
+  const cells = cellCounts.map((count, idx) => ({
+    idx,
+    label: cellLabels ? cellLabels[idx] : null,
+    count,
+    pct: totalSubmissions > 0 ? Math.round((count / totalSubmissions) * 100) : 0
+  }));
+
+  return json({
+    week_id: week,
+    total_submissions: totalSubmissions,
+    cells
+  });
 }
 
 async function enforceRateLimit(env, key, windowSeconds, limit) {

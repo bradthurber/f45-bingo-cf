@@ -143,7 +143,46 @@ body {
   color: var(--accent);
 }
 
-.tickerBox { margin-top: 10px; }
+.statsSection {
+  margin-bottom: 16px;
+}
+
+.statsList {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.statItem {
+  display: grid;
+  grid-template-columns: 50px 1fr;
+  gap: 10px;
+  align-items: center;
+  font-size: 14px;
+  padding: 8px 10px;
+  background: rgba(0,0,0,0.2);
+  border-radius: 8px;
+}
+
+.statItem.muted {
+  color: var(--muted);
+  display: block;
+}
+
+.statPct {
+  font-weight: 800;
+  color: var(--accent);
+  font-size: 16px;
+}
+
+.statLabel {
+  color: var(--text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.tickerBox { margin-top: auto; }
 .ticker {
   font-size: 18px;
   padding: 14px;
