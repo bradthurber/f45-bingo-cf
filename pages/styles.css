@@ -145,34 +145,12 @@ select.input {
   color: #f7d10e;
 }
 
-/* Actions */
-.actions {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px;
-  margin: 20px 0;
-}
-
-#submitBtn {
-  padding: 16px;
-  font-size: 16px;
-  font-weight: 700;
-  border-radius: 12px;
-  border: none;
-  background: #f7d10e;
-  color: #211551;
-  cursor: pointer;
-  -webkit-tap-highlight-color: transparent;
-}
-
-#submitBtn:active {
-  background: #d4b00c;
-}
-
-.scan {
+/* Scan button */
+.scan-btn {
   display: flex;
   align-items: center;
   justify-content: center;
+  width: 100%;
   padding: 16px;
   font-size: 16px;
   font-weight: 700;
@@ -184,17 +162,36 @@ select.input {
   -webkit-tap-highlight-color: transparent;
 }
 
-.scan:active {
+.scan-btn:active {
   background: #3d2d7a;
 }
 
-.scan input {
+.scan-btn input {
   display: none;
 }
 
-.scan.disabled {
+.scan-btn.disabled {
   opacity: 0.5;
   pointer-events: none;
+}
+
+/* Submit button */
+.submit-btn {
+  width: 100%;
+  padding: 16px;
+  font-size: 16px;
+  font-weight: 700;
+  border-radius: 12px;
+  border: none;
+  background: #f7d10e;
+  color: #211551;
+  cursor: pointer;
+  margin-top: 12px;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.submit-btn:active {
+  background: #d4b00c;
 }
 
 /* Scan Status */

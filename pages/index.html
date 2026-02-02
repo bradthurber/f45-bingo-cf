@@ -16,17 +16,12 @@
     <!-- Detected week display -->
     <div id="weekDisplay" class="week-display">Scan your card to start</div>
 
-    <!-- Display name -->
-    <div class="row">
-      <label class="lbl">Your name</label>
-      <input
-        id="displayName"
-        class="input"
-        type="text"
-        placeholder="Enter your name"
-        autocomplete="off"
-      />
-    </div>
+    <!-- Scan -->
+    <label class="scan-btn" id="scanLabel">
+      <span id="scanText">Scan card</span>
+      <input id="scanInput" type="file" accept="image/*" capture="environment" />
+    </label>
+    <div id="scanStatus" class="scan-status"></div>
 
     <!-- Bingo grid -->
     <div class="grid" id="bingoGrid">
@@ -68,17 +63,19 @@
       <span id="ticketCount">0</span>
     </div>
 
-    <!-- Actions -->
-    <div class="actions">
-      <button id="submitBtn">Submit</button>
-
-      <label class="scan" id="scanLabel">
-        <span id="scanText">Scan card</span>
-        <input id="scanInput" type="file" accept="image/*" capture="environment" />
-      </label>
+    <!-- Name and Submit -->
+    <div class="row">
+      <label class="lbl">Your name</label>
+      <input
+        id="displayName"
+        class="input"
+        type="text"
+        placeholder="Enter your name"
+        autocomplete="off"
+      />
     </div>
 
-    <div id="scanStatus" class="scan-status"></div>
+    <button id="submitBtn" class="submit-btn">Submit</button>
 
     <!-- Leaderboard -->
     <h2>Leaderboard</h2>
