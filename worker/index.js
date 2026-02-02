@@ -30,6 +30,12 @@ export default {
       if (url.pathname === "/api/scan" && request.method === "POST") {
         return await handleScan(request, env);
       }
+      if (url.pathname === "/api/admin/define-card" && request.method === "POST") {
+        return await handleDefineCard(request, env);
+      }
+      if (url.pathname === "/api/card" && request.method === "GET") {
+        return await handleGetCard(env, url);
+      }
 
       return json({ error: "not_found" }, 404);
     } catch (e) {
@@ -286,6 +292,120 @@ async function handleScan(request, env) {
   const notes = typeof parsed.notes === "string" ? parsed.notes.slice(0, 200) : "";
 
   return json({ marked_cells: normalized, confidence, notes });
+}
+
+async function handleDefineCard(request, env) {
+  // No geo restriction for admin endpoint
+  if (!env.STUDIO_CODE) return json({ error: "studio_code_not_configured" }, 500);
+
+  const code = request.headers.get("x-studio-code") || "";
+  if (code !== env.STUDIO_CODE) return json({ error: "bad_studio_code" }, 403);
+
+  if (!env.OPENAI_API_KEY) return json({ error: "missing_openai_key" }, 500);
+
+  const ip = request.headers.get("CF-Connecting-IP") || "unknown";
+  await enforceRateLimit(env, `define:ip:${ip}`, 60, 5);
+
+  const contentType = request.headers.get("content-type") || "";
+  if (!contentType.includes("multipart/form-data")) return json({ error: "expected_multipart" }, 400);
+
+  const form = await request.formData();
+  const file = form.get("image");
+  const weekId = safeText(form.get("week") || "", 32);
+
+  if (!weekId) return json({ error: "missing_week" }, 400);
+  if (!(file instanceof File)) return json({ error: "missing_image" }, 400);
+
+  const maxBytes = env.MAX_IMAGE_BYTES ? parseInt(env.MAX_IMAGE_BYTES, 10) : 6000000;
+  if (file.size > maxBytes) return json({ error: "image_too_large", max_bytes: maxBytes }, 413);
+
+  const buf = await file.arrayBuffer();
+  const base64 = arrayBufferToBase64(buf);
+
+  const prompt =
+    "You are given an image of a bingo card with a 5x5 grid. " +
+    "Extract the text from each cell, reading left-to-right, top-to-bottom. " +
+    "Return JSON: {\"cells\": [\"cell 0 text\", \"cell 1 text\", ..., \"cell 24 text\"]} " +
+    "Include exactly 25 strings. If a cell is empty or unreadable, use an empty string.";
+
+  const openaiResp = await fetch("https://api.openai.com/v1/responses", {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${env.OPENAI_API_KEY}`,
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      model: env.OPENAI_MODEL || "gpt-4.1-mini",
+      input: [
+        {
+          role: "user",
+          content: [
+            { type: "input_text", text: prompt },
+            { type: "input_image", image_url: `data:${file.type || "image/jpeg"};base64,${base64}` }
+          ]
+        }
+      ],
+      text: { format: { type: "json_object" } }
+    })
+  });
+
+  if (!openaiResp.ok) {
+    const errText = await openaiResp.text();
+    return json({ error: "openai_error", details: errText }, 502);
+  }
+
+  const data = await openaiResp.json();
+  const outTextRaw = extractResponseText(data);
+  const outText = stripJsonFences(outTextRaw);
+
+  let parsed;
+  try {
+    parsed = JSON.parse(outText);
+  } catch {
+    return json(
+      {
+        error: "bad_openai_json",
+        raw: String(outTextRaw).slice(0, 2000),
+        cleaned: String(outText).slice(0, 2000)
+      },
+      502
+    );
+  }
+
+  if (!Array.isArray(parsed.cells) || parsed.cells.length !== 25) {
+    return json({ error: "invalid_cells_array", got: parsed.cells }, 502);
+  }
+
+  const cells = parsed.cells.map(c => (typeof c === "string" ? c : String(c || "")));
+  const cellsJson = JSON.stringify(cells);
+  const createdAt = new Date().toISOString();
+
+  await env.DB.prepare(
+    "INSERT INTO card_definitions (week_id, cells_json, created_at) VALUES (?, ?, ?) " +
+    "ON CONFLICT(week_id) DO UPDATE SET cells_json = excluded.cells_json, created_at = excluded.created_at"
+  ).bind(weekId, cellsJson, createdAt).run();
+
+  return json({ ok: true, week_id: weekId, cells, created_at: createdAt });
+}
+
+async function handleGetCard(env, url) {
+  const week = (url.searchParams.get("week") || "").trim();
+  if (!week) return json({ error: "missing_week" }, 400);
+
+  const row = await env.DB.prepare(
+    "SELECT week_id, cells_json FROM card_definitions WHERE week_id = ?"
+  ).bind(week).first();
+
+  if (!row) return json({ error: "not_found" }, 404);
+
+  let cells;
+  try {
+    cells = JSON.parse(row.cells_json);
+  } catch {
+    return json({ error: "corrupt_data" }, 500);
+  }
+
+  return json({ week_id: row.week_id, cells });
 }
 
 async function enforceRateLimit(env, key, windowSeconds, limit) {

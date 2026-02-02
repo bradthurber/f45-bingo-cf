@@ -52,12 +52,21 @@ h1, h2 {
 }
 
 .cell {
-  padding: 18px 0;
+  padding: 8px 4px;
   border-radius: 12px;
   border: 1px solid #ccc;
   background: #fff;
-  font-size: 18px;
+  font-size: 11px;
+  line-height: 1.2;
   cursor: pointer;
+  min-height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  overflow: hidden;
+  word-break: break-word;
+  hyphens: auto;
 }
 
 .cell.marked {

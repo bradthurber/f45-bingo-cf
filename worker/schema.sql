@@ -19,3 +19,9 @@ CREATE TABLE IF NOT EXISTS ratelimits (
   count INTEGER NOT NULL,
   reset_at INTEGER NOT NULL
 );
+
+CREATE TABLE IF NOT EXISTS card_definitions (
+  week_id TEXT PRIMARY KEY,
+  cells_json TEXT NOT NULL,
+  created_at TEXT NOT NULL
+);

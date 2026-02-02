@@ -14,6 +14,7 @@ const LS_DEVICE = "f45_device_id";
 =========================== */
 
 let markedMask = 0n;
+let cardCells = null; // Array of 25 strings, or null if not loaded
 
 /* ===========================
    HELPERS
@@ -101,6 +102,29 @@ function isMarked(idx) {
 }
 
 /* ===========================
+   CARD DEFINITION
+=========================== */
+
+async function fetchCardDefinition(week) {
+  try {
+    const res = await fetch(`${API_BASE}/api/card?week=${encodeURIComponent(week)}`);
+    if (!res.ok) {
+      cardCells = null;
+      return;
+    }
+    const data = await res.json();
+    if (Array.isArray(data.cells) && data.cells.length === 25) {
+      cardCells = data.cells;
+    } else {
+      cardCells = null;
+    }
+  } catch {
+    cardCells = null;
+  }
+  renderGrid();
+}
+
+/* ===========================
    RENDERING
 =========================== */
 
@@ -108,6 +132,10 @@ function renderGrid() {
   const cells = document.querySelectorAll(".cell");
   cells.forEach((cell, i) => {
     cell.classList.toggle("marked", isMarked(i));
+    // Display cell text if available, otherwise fall back to number
+    const text = cardCells && cardCells[i] ? cardCells[i] : String(i + 1);
+    cell.textContent = text;
+    cell.title = cardCells && cardCells[i] ? cardCells[i] : "";
   });
 }
 
@@ -228,6 +256,7 @@ window.addEventListener("DOMContentLoaded", () => {
     renderGrid();
     renderTickets();
     refreshLeaderboard();
+    fetchCardDefinition(getWeekId());
   });
 
   // Submit
@@ -241,4 +270,5 @@ window.addEventListener("DOMContentLoaded", () => {
   renderGrid();
   renderTickets();
   refreshLeaderboard();
+  fetchCardDefinition(getWeekId());
 });
