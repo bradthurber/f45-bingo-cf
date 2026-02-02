@@ -201,37 +201,66 @@ async function refreshLeaderboard() {
 =========================== */
 
 async function scanImage(file) {
-  const fd = new FormData();
-  fd.append("image", file);
+  const scanStatus = qs("scanStatus");
+  const scanLabel = qs("scanLabel");
+  const scanInput = qs("scanInput");
 
-  const res = await fetch(`${API_BASE}/api/scan`, {
-    method: "POST",
-    headers: { "x-device-id": getDeviceId() },
-    body: fd
-  });
+  // Show loading state
+  scanStatus.textContent = "Scanning your card...";
+  scanStatus.className = "scan-status scanning";
+  scanLabel.classList.add("disabled");
+  scanInput.disabled = true;
 
+  try {
+    const fd = new FormData();
+    fd.append("image", file);
 
-  const data = await corsJson(res);
+    const res = await fetch(`${API_BASE}/api/scan`, {
+      method: "POST",
+      headers: { "x-device-id": getDeviceId() },
+      body: fd
+    });
 
-  if (Array.isArray(data.marked_cells)) {
-    // Build a mask from r/c pairs (0-based)
-    let m = 0n;
-    for (const cell of data.marked_cells) {
-      const r = Number(cell.r);
-      const c = Number(cell.c);
-      if (!Number.isFinite(r) || !Number.isFinite(c)) continue;
-      if (r < 0 || r > 4 || c < 0 || c > 4) continue;
+    const data = await corsJson(res);
 
-      const idx = r * 5 + c; // 0..24
-      m |= 1n << BigInt(idx);
+    if (Array.isArray(data.marked_cells)) {
+      // Build a mask from r/c pairs (0-based)
+      let m = 0n;
+      for (const cell of data.marked_cells) {
+        const r = Number(cell.r);
+        const c = Number(cell.c);
+        if (!Number.isFinite(r) || !Number.isFinite(c)) continue;
+        if (r < 0 || r > 4 || c < 0 || c > 4) continue;
+
+        const idx = r * 5 + c; // 0..24
+        m |= 1n << BigInt(idx);
+      }
+
+      markedMask = markedMask | m;
+      persistMask();
+      renderGrid();
+      renderTickets();
+
+      const count = data.marked_cells.length;
+      scanStatus.textContent = count > 0
+        ? `Found ${count} marked cell${count === 1 ? "" : "s"}`
+        : "No marked cells found";
+      scanStatus.className = "scan-status success";
     }
+  } catch (err) {
+    scanStatus.textContent = "Scan failed. Please try again.";
+    scanStatus.className = "scan-status error";
+  } finally {
+    scanLabel.classList.remove("disabled");
+    scanInput.disabled = false;
+    scanInput.value = "";
 
-    markedMask = markedMask | m;
-    persistMask();
-    renderGrid();
-    renderTickets();
+    // Clear status after 4 seconds
+    setTimeout(() => {
+      scanStatus.textContent = "";
+      scanStatus.className = "scan-status";
+    }, 4000);
   }
-
 }
 
 /* ===========================

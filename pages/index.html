@@ -85,11 +85,13 @@
     <div class="actions">
       <button id="submitBtn">Submit</button>
 
-      <label class="scan">
-        Scan card
+      <label class="scan" id="scanLabel">
+        <span id="scanText">Scan card</span>
         <input id="scanInput" type="file" accept="image/*" capture="environment" />
       </label>
     </div>
+
+    <div id="scanStatus" class="scan-status"></div>
 
     <!-- Leaderboard -->
     <h2>Leaderboard</h2>

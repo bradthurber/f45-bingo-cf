@@ -160,3 +160,27 @@ h1, h2 {
   font-size: 12px;
   opacity: 0.7;
 }
+
+.scan-status {
+  text-align: center;
+  font-size: 14px;
+  min-height: 20px;
+  margin: 8px 0;
+}
+
+.scan-status.scanning {
+  color: #666;
+}
+
+.scan-status.success {
+  color: #16a34a;
+}
+
+.scan-status.error {
+  color: #dc2626;
+}
+
+.scan.disabled {
+  opacity: 0.5;
+  pointer-events: none;
+}
