@@ -139,7 +139,10 @@ async function submitBoard() {
 
   const res = await fetch(`${API_BASE}/api/submit`, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: {
+      "Content-Type": "application/json",
+      "x-device-id": getDeviceId()
+    },
     body: JSON.stringify(payload)
   });
 
@@ -182,12 +185,25 @@ async function scanImage(file) {
 
   const data = await corsJson(res);
 
-  if (data.marked_mask) {
-    markedMask = BigInt(data.marked_mask);
+  if (Array.isArray(data.marked_cells)) {
+    // Build a mask from r/c pairs (0-based)
+    let m = 0n;
+    for (const cell of data.marked_cells) {
+      const r = Number(cell.r);
+      const c = Number(cell.c);
+      if (!Number.isFinite(r) || !Number.isFinite(c)) continue;
+      if (r < 0 || r > 4 || c < 0 || c > 4) continue;
+
+      const idx = r * 5 + c; // 0..24
+      m |= 1n << BigInt(idx);
+    }
+
+    markedMask = markedMask | m;
     persistMask();
     renderGrid();
     renderTickets();
   }
+
 }
 
 /* ===========================
