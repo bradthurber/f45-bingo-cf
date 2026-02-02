@@ -162,7 +162,7 @@ async function refreshLeaderboard() {
     const tr = document.createElement("tr");
     tr.innerHTML = `
       <td>${r.display_name}</td>
-      <td>${r.tickets}</td>
+      <td>${r.tickets_total}</td>
     `;
     tbody.appendChild(tr);
   });
