@@ -153,8 +153,10 @@ Error shape:
 
 - Frontend is served via Cloudflare Pages
 - Backend API runs on Cloudflare Workers
-- Pages call the Worker at:
-  https://f45-bingo.f45-bingo.workers.dev
+
+Production URLs:
+- Pages (frontend): https://f45-bingo-cf.pages.dev
+- Worker (API): https://f45-bingo.f45-bingo.workers.dev
 
 Common pitfalls:
 - Forgetting x-device-id
