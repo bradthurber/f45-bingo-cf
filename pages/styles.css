@@ -5,7 +5,7 @@
 body {
   font-family: system-ui, -apple-system, sans-serif;
   margin: 0;
-  background: #111;
+  background: #0f0b1a;
   color: #fff;
   min-height: 100vh;
   padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
@@ -23,7 +23,7 @@ h1 {
   font-weight: 800;
   margin: 0 0 20px 0;
   text-align: center;
-  color: #f97316;
+  color: #f7d10e;
 }
 
 h2 {
@@ -42,7 +42,7 @@ h2 {
   font-weight: 600;
   font-size: 14px;
   margin-bottom: 8px;
-  color: #aaa;
+  color: #a99fc4;
 }
 
 .input {
@@ -50,15 +50,15 @@ h2 {
   padding: 14px 16px;
   font-size: 16px;
   border-radius: 12px;
-  border: 2px solid #333;
-  background: #222;
+  border: 2px solid #3d2d7a;
+  background: #211551;
   color: #fff;
   -webkit-appearance: none;
 }
 
 .input:focus {
   outline: none;
-  border-color: #f97316;
+  border-color: #f7d10e;
 }
 
 select.input {
@@ -81,8 +81,8 @@ select.input {
   aspect-ratio: 1;
   padding: 6px;
   border-radius: 10px;
-  border: 2px solid #333;
-  background: #222;
+  border: 2px solid #3d2d7a;
+  background: #211551;
   font-size: 10px;
   font-weight: 500;
   line-height: 1.15;
@@ -94,7 +94,7 @@ select.input {
   overflow: hidden;
   word-break: break-word;
   hyphens: auto;
-  color: #ccc;
+  color: #c4b8e0;
   transition: all 0.15s ease;
   -webkit-tap-highlight-color: transparent;
 }
@@ -104,15 +104,15 @@ select.input {
 }
 
 .cell.marked {
-  background: #f97316;
-  color: #fff;
-  border-color: #f97316;
+  background: #f7d10e;
+  color: #211551;
+  border-color: #f7d10e;
   font-weight: 600;
 }
 
 /* Tickets */
 .tickets {
-  background: #222;
+  background: #211551;
   border-radius: 12px;
   padding: 16px;
   text-align: center;
@@ -121,14 +121,14 @@ select.input {
 
 .tickets-label {
   font-size: 14px;
-  color: #aaa;
+  color: #a99fc4;
   margin-bottom: 4px;
 }
 
 #ticketCount {
   font-size: 48px;
   font-weight: 800;
-  color: #f97316;
+  color: #f7d10e;
 }
 
 /* Actions */
@@ -145,14 +145,14 @@ select.input {
   font-weight: 700;
   border-radius: 12px;
   border: none;
-  background: #f97316;
-  color: #fff;
+  background: #f7d10e;
+  color: #211551;
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
 }
 
 #submitBtn:active {
-  background: #ea580c;
+  background: #d4b00c;
 }
 
 .scan {
@@ -163,15 +163,15 @@ select.input {
   font-size: 16px;
   font-weight: 700;
   border-radius: 12px;
-  border: 2px solid #333;
-  background: #222;
+  border: 2px solid #3d2d7a;
+  background: #211551;
   color: #fff;
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
 }
 
 .scan:active {
-  background: #333;
+  background: #3d2d7a;
 }
 
 .scan input {
@@ -193,7 +193,7 @@ select.input {
 }
 
 .scan-status.scanning {
-  color: #aaa;
+  color: #a99fc4;
 }
 
 .scan-status.success {
@@ -207,7 +207,7 @@ select.input {
 /* Leaderboard */
 .leaderboard {
   width: 100%;
-  background: #222;
+  background: #211551;
   border-radius: 12px;
   overflow: hidden;
   border-collapse: collapse;
@@ -218,10 +218,10 @@ select.input {
   text-align: left;
   font-size: 12px;
   font-weight: 600;
-  color: #aaa;
+  color: #a99fc4;
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  background: #1a1a1a;
+  background: #1a1040;
 }
 
 .leaderboard th:last-child {
@@ -230,7 +230,7 @@ select.input {
 
 .leaderboard td {
   padding: 14px 16px;
-  border-top: 1px solid #333;
+  border-top: 1px solid #3d2d7a;
   font-size: 15px;
 }
 
@@ -241,7 +241,7 @@ select.input {
 .leaderboard td:last-child {
   text-align: right;
   font-weight: 800;
-  color: #f97316;
+  color: #f7d10e;
 }
 
 .leaderboard tbody tr:first-child td {
