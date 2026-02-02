@@ -14,7 +14,8 @@ const LS_DEVICE = "f45_device_id";
 =========================== */
 
 let markedMask = 0n;
-let cardCells = null; // Array of 25 strings, or null if not loaded
+let cardCells = null;
+let currentWeek = null;
 
 /* ===========================
    HELPERS
@@ -38,25 +39,38 @@ function getDeviceId() {
   return id;
 }
 
+function formatWeek(weekId) {
+  if (!weekId) return null;
+  const match = weekId.match(/week(\d+)/i);
+  if (match) return `Week ${match[1]}`;
+  return weekId;
+}
 
 /* ===========================
    WEEK HANDLING
 =========================== */
 
-function getWeekId() {
-  const sel = qs("weekSelect");
-  return sel?.value || "week1";
-}
-
-function loadWeekId() {
+function loadWeek() {
   const saved = localStorage.getItem(LS_WEEK);
-  if (saved && qs("weekSelect")) {
-    qs("weekSelect").value = saved;
+  if (saved) {
+    currentWeek = saved;
   }
 }
 
-function saveWeekId() {
-  localStorage.setItem(LS_WEEK, getWeekId());
+function saveWeek(week) {
+  currentWeek = week;
+  localStorage.setItem(LS_WEEK, week);
+}
+
+function renderWeekDisplay() {
+  const display = qs("weekDisplay");
+  if (currentWeek) {
+    display.textContent = formatWeek(currentWeek);
+    display.classList.add("has-week");
+  } else {
+    display.textContent = "Scan your card to start";
+    display.classList.remove("has-week");
+  }
 }
 
 /* ===========================
@@ -106,6 +120,11 @@ function isMarked(idx) {
 =========================== */
 
 async function fetchCardDefinition(week) {
+  if (!week) {
+    cardCells = null;
+    renderGrid();
+    return;
+  }
   try {
     const res = await fetch(`${API_BASE}/api/card?week=${encodeURIComponent(week)}`);
     if (!res.ok) {
@@ -132,7 +151,6 @@ function renderGrid() {
   const cells = document.querySelectorAll(".cell");
   cells.forEach((cell, i) => {
     cell.classList.toggle("marked", isMarked(i));
-    // Display cell text if available, otherwise fall back to number
     const text = cardCells && cardCells[i] ? cardCells[i] : String(i + 1);
     cell.textContent = text;
     cell.title = cardCells && cardCells[i] ? cardCells[i] : "";
@@ -140,7 +158,6 @@ function renderGrid() {
 }
 
 function countTickets() {
-  // very simple: 1 per square + bonuses handled server-side
   let count = 0;
   for (let i = 0; i < 25; i++) {
     if (isMarked(i)) count++;
@@ -157,43 +174,66 @@ function renderTickets() {
 =========================== */
 
 async function submitBoard() {
+  if (!currentWeek) {
+    alert("Please scan your card first to detect the week.");
+    return;
+  }
+
   saveName();
 
+  const name = qs("displayName").value.trim();
+  if (!name) {
+    alert("Please enter your name.");
+    return;
+  }
+
   const payload = {
-    week_id: getWeekId(),
-    display_name: qs("displayName").value.trim(),
+    week_id: currentWeek,
+    display_name: name,
     marked_mask: markedMask.toString()
   };
 
-  const res = await fetch(`${API_BASE}/api/submit`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "x-device-id": getDeviceId()
-    },
-    body: JSON.stringify(payload)
-  });
+  try {
+    const res = await fetch(`${API_BASE}/api/submit`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "x-device-id": getDeviceId()
+      },
+      body: JSON.stringify(payload)
+    });
 
-  await corsJson(res);
-  await refreshLeaderboard();
+    await corsJson(res);
+    await refreshLeaderboard();
+  } catch (err) {
+    alert("Submit failed. Please try again.");
+  }
 }
 
 async function refreshLeaderboard() {
-  const week = encodeURIComponent(getWeekId());
-  const res = await fetch(`${API_BASE}/api/leaderboard?week=${week}`);
-  const data = await corsJson(res);
+  if (!currentWeek) {
+    qs("leaderboardBody").innerHTML = "";
+    return;
+  }
 
-  const tbody = qs("leaderboardBody");
-  tbody.innerHTML = "";
+  try {
+    const res = await fetch(`${API_BASE}/api/leaderboard?week=${encodeURIComponent(currentWeek)}`);
+    const data = await corsJson(res);
 
-  data.rows.forEach(r => {
-    const tr = document.createElement("tr");
-    tr.innerHTML = `
-      <td>${r.display_name}</td>
-      <td>${r.tickets_total}</td>
-    `;
-    tbody.appendChild(tr);
-  });
+    const tbody = qs("leaderboardBody");
+    tbody.innerHTML = "";
+
+    data.rows.forEach(r => {
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td>${r.display_name}</td>
+        <td>${r.tickets_total}</td>
+      `;
+      tbody.appendChild(tr);
+    });
+  } catch {
+    // Ignore leaderboard errors
+  }
 }
 
 /* ===========================
@@ -205,7 +245,6 @@ async function scanImage(file) {
   const scanLabel = qs("scanLabel");
   const scanInput = qs("scanInput");
 
-  // Show loading state
   scanStatus.textContent = "Scanning your card...";
   scanStatus.className = "scan-status scanning";
   scanLabel.classList.add("disabled");
@@ -223,8 +262,19 @@ async function scanImage(file) {
 
     const data = await corsJson(res);
 
+    // Handle detected week
+    if (data.week && data.week !== currentWeek) {
+      // New week detected - clear old marks and switch
+      if (currentWeek && data.week !== currentWeek) {
+        clearGridMarks();
+      }
+      saveWeek(data.week);
+      renderWeekDisplay();
+      await fetchCardDefinition(data.week);
+      await refreshLeaderboard();
+    }
+
     if (Array.isArray(data.marked_cells)) {
-      // Build a mask from r/c pairs (0-based)
       let m = 0n;
       for (const cell of data.marked_cells) {
         const r = Number(cell.r);
@@ -232,7 +282,7 @@ async function scanImage(file) {
         if (!Number.isFinite(r) || !Number.isFinite(c)) continue;
         if (r < 0 || r > 4 || c < 0 || c > 4) continue;
 
-        const idx = r * 5 + c; // 0..24
+        const idx = r * 5 + c;
         m |= 1n << BigInt(idx);
       }
 
@@ -242,9 +292,14 @@ async function scanImage(file) {
       renderTickets();
 
       const count = data.marked_cells.length;
-      scanStatus.textContent = count > 0
+      let statusMsg = "";
+      if (data.week) {
+        statusMsg = `${formatWeek(data.week)}: `;
+      }
+      statusMsg += count > 0
         ? `Found ${count} marked cell${count === 1 ? "" : "s"}`
         : "No marked cells found";
+      scanStatus.textContent = statusMsg;
       scanStatus.className = "scan-status success";
     }
   } catch (err) {
@@ -255,7 +310,6 @@ async function scanImage(file) {
     scanInput.disabled = false;
     scanInput.value = "";
 
-    // Clear status after 4 seconds
     setTimeout(() => {
       scanStatus.textContent = "";
       scanStatus.className = "scan-status";
@@ -268,36 +322,27 @@ async function scanImage(file) {
 =========================== */
 
 window.addEventListener("DOMContentLoaded", () => {
-  // Load persisted state
-  loadWeekId();
+  loadWeek();
   loadName();
   loadMask();
 
-  // Wire grid
+  renderWeekDisplay();
+
   document.querySelectorAll(".cell").forEach((cell, idx) => {
     cell.addEventListener("click", () => toggleCell(idx));
   });
 
-  // Week change
-  qs("weekSelect").addEventListener("change", () => {
-    saveWeekId();
-    clearGridMarks();
-    renderGrid();
-    renderTickets();
-    refreshLeaderboard();
-    fetchCardDefinition(getWeekId());
-  });
-
-  // Submit
   qs("submitBtn").addEventListener("click", submitBoard);
 
-  // Scan
   qs("scanInput").addEventListener("change", e => {
     if (e.target.files[0]) scanImage(e.target.files[0]);
   });
 
   renderGrid();
   renderTickets();
-  refreshLeaderboard();
-  fetchCardDefinition(getWeekId());
+
+  if (currentWeek) {
+    fetchCardDefinition(currentWeek);
+    refreshLeaderboard();
+  }
 });

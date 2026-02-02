@@ -215,13 +215,15 @@ async function handleScan(request, env) {
   const prompt =
     "You are given a photo of a paper bingo card. " +
     "The card contains a 5x5 grid of squares. " +
-    "Ignore all printed text, titles, logos, cell borders, and shadows. " +
-    "Your ONLY task is to detect which grid cells contain a clear handwritten mark such as an X, checkmark, or filled/scribbled area. " +
+    "TASK 1: Find the week identifier on the card. Look for text like 'Week 1', 'Week 2', 'WEEK 3', etc. " +
+    "Return the week as 'week1', 'week2', etc. (lowercase, no space). If not found, use null. " +
+    "TASK 2: Detect which grid cells contain a clear handwritten mark such as an X, checkmark, or filled/scribbled area. " +
+    "Ignore printed text, titles, logos, cell borders, and shadows. " +
     "Be CONSERVATIVE: only report marks you are confident about. " +
     "If a cell has no obvious handwritten mark, do NOT include it. " +
     "Shadows, glare, printing artifacts, and smudges are NOT marks. " +
     "If the card appears blank or you see no clear marks, return an empty marked_cells array. " +
-    "Return JSON only with schema: { marked_cells: [{r:0..4,c:0..4}], confidence: 0..1, notes: string }. " +
+    "Return JSON only with schema: { week: string|null, marked_cells: [{r:0..4,c:0..4}], confidence: 0..1, notes: string }. " +
     "Use 0-based row and column indices with top-left as r=0,c=0. " +
     "Do not include any extra keys.";
 
@@ -282,8 +284,9 @@ async function handleScan(request, env) {
 
   const confidence = typeof parsed.confidence === "number" ? clamp(parsed.confidence, 0, 1) : 0.5;
   const notes = typeof parsed.notes === "string" ? parsed.notes.slice(0, 200) : "";
+  const week = typeof parsed.week === "string" ? parsed.week.toLowerCase().replace(/\s+/g, "") : null;
 
-  return json({ marked_cells: normalized, confidence, notes });
+  return json({ week, marked_cells: normalized, confidence, notes });
 }
 
 async function handleDefineCard(request, env) {

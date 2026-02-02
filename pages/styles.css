@@ -33,6 +33,20 @@ h2 {
   color: #fff;
 }
 
+.week-display {
+  text-align: center;
+  font-size: 14px;
+  color: #a99fc4;
+  padding: 12px;
+  margin-bottom: 16px;
+}
+
+.week-display.has-week {
+  font-size: 20px;
+  font-weight: 800;
+  color: #f7d10e;
+}
+
 .row {
   margin: 16px 0;
 }
