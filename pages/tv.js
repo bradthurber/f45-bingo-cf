@@ -144,7 +144,7 @@ function computeTickerMessage(rows, leaderChanged) {
 
 function computeJoinUrl() {
   const u = new URL(location.href);
-  u.pathname = u.pathname.replace(/\/tv\.html$/, "/");
+  u.pathname = "/";
   u.search = "";
   return u.toString();
 }
