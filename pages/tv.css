@@ -183,6 +183,14 @@ body {
 }
 
 .tickerBox { margin-top: auto; }
+
+.disclaimer {
+  margin-top: 16px;
+  font-size: 12px;
+  color: var(--muted2);
+  text-align: center;
+  font-style: italic;
+}
 .ticker {
   font-size: 18px;
   padding: 14px;
