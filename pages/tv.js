@@ -9,7 +9,7 @@ const elTicker = document.getElementById("ticker");
 const elQr = document.getElementById("qrImg");
 const elJoin = document.getElementById("joinUrl");
 
-let weekId = currentWeekId(new Date());
+let weekId = getWeekFromUrl() || "week1";
 let lastSnapshot = new Map();
 let lastLeader = null;
 let lastTickMsg = "Waiting for updates...";
@@ -17,7 +17,7 @@ let lastTickMsg = "Waiting for updates...";
 init();
 
 function init() {
-  elWeek.textContent = weekId;
+  elWeek.textContent = formatWeekDisplay(weekId);
 
   const joinUrl = computeJoinUrl();
   elJoin.textContent = joinUrl;
@@ -133,4 +133,15 @@ function escapeHtml(s) {
     .replaceAll(">", "&gt;")
     .replaceAll('"', "&quot;")
     .replaceAll("'", "&#039;");
+}
+
+function getWeekFromUrl() {
+  const params = new URLSearchParams(location.search);
+  return params.get("week");
+}
+
+function formatWeekDisplay(weekId) {
+  const match = weekId.match(/^week(\d+)$/i);
+  if (match) return match[1];
+  return weekId;
 }
