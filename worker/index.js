@@ -127,11 +127,6 @@ async function handleSubmit(request, env) {
   const geoBlock = enforceIndianaOnly(request, env);
   if (geoBlock) return geoBlock;
 
-  if (env.STUDIO_CODE) {
-    const code = request.headers.get("x-studio-code") || "";
-    if (code !== env.STUDIO_CODE) return json({ error: "bad_studio_code" }, 403);
-  }
-
   const deviceId = request.headers.get("x-device-id") || "";
   if (!deviceId) return json({ error: "missing_device_id" }, 400);
 
@@ -195,11 +190,6 @@ async function handleScan(request, env) {
 
   if (env.SCANNING_ENABLED === "false") return json({ error: "scanning_disabled" }, 503);
   if (!env.OPENAI_API_KEY) return json({ error: "missing_openai_key" }, 500);
-
-  if (env.STUDIO_CODE) {
-    const code = request.headers.get("x-studio-code") || "";
-    if (code !== env.STUDIO_CODE) return json({ error: "bad_studio_code" }, 403);
-  }
 
   const deviceId = request.headers.get("x-device-id") || "";
   if (!deviceId) return json({ error: "missing_device_id" }, 400);
