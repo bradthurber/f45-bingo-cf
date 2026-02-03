@@ -5,8 +5,8 @@
 body {
   font-family: system-ui, -apple-system, sans-serif;
   margin: 0;
-  background: #0f0b1a;
-  color: #fff;
+  background: #fff;
+  color: #1a1a1a;
   min-height: 100vh;
   padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
 }
@@ -23,20 +23,20 @@ h1 {
   font-weight: 800;
   margin: 0 0 20px 0;
   text-align: center;
-  color: #f7d10e;
+  color: #1a1a1a;
 }
 
 h2 {
   font-size: 18px;
   font-weight: 700;
   margin: 24px 0 12px 0;
-  color: #fff;
+  color: #1a1a1a;
 }
 
 .week-display {
   text-align: center;
   font-size: 14px;
-  color: #a99fc4;
+  color: #666;
   padding: 12px;
   margin-bottom: 16px;
 }
@@ -44,7 +44,7 @@ h2 {
 .week-display.has-week {
   font-size: 20px;
   font-weight: 800;
-  color: #f7d10e;
+  color: #1a1a1a;
 }
 
 .row {
@@ -56,7 +56,7 @@ h2 {
   font-weight: 600;
   font-size: 14px;
   margin-bottom: 8px;
-  color: #a99fc4;
+  color: #666;
 }
 
 .input {
@@ -64,15 +64,15 @@ h2 {
   padding: 14px 16px;
   font-size: 16px;
   border-radius: 12px;
-  border: 2px solid #3d2d7a;
-  background: #211551;
-  color: #fff;
+  border: 2px solid #e5e5e5;
+  background: #fff;
+  color: #1a1a1a;
   -webkit-appearance: none;
 }
 
 .input:focus {
   outline: none;
-  border-color: #f7d10e;
+  border-color: #1a1a1a;
 }
 
 select.input {
@@ -81,6 +81,36 @@ select.input {
 
 .hint {
   display: none;
+}
+
+/* Scan button */
+.scan-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 16px;
+  font-size: 16px;
+  font-weight: 700;
+  border-radius: 12px;
+  border: 2px solid #e5e5e5;
+  background: #f5f5f5;
+  color: #1a1a1a;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.scan-btn:active {
+  background: #e5e5e5;
+}
+
+.scan-btn input {
+  display: none;
+}
+
+.scan-btn.disabled {
+  opacity: 0.5;
+  pointer-events: none;
 }
 
 /* Bingo Grid */
@@ -95,8 +125,8 @@ select.input {
   aspect-ratio: 1;
   padding: 6px;
   border-radius: 10px;
-  border: 2px solid #3d2d7a;
-  background: #211551;
+  border: 2px solid #e5e5e5;
+  background: #f9f9f9;
   font-size: 10px;
   font-weight: 500;
   line-height: 1.15;
@@ -108,7 +138,7 @@ select.input {
   overflow: hidden;
   word-break: break-word;
   hyphens: auto;
-  color: #c4b8e0;
+  color: #444;
   transition: all 0.15s ease;
   -webkit-tap-highlight-color: transparent;
 }
@@ -118,15 +148,15 @@ select.input {
 }
 
 .cell.marked {
-  background: #f7d10e;
-  color: #211551;
-  border-color: #f7d10e;
+  background: #1a1a1a;
+  color: #fff;
+  border-color: #1a1a1a;
   font-weight: 600;
 }
 
 /* Tickets */
 .tickets {
-  background: #211551;
+  background: #f5f5f5;
   border-radius: 12px;
   padding: 16px;
   text-align: center;
@@ -135,44 +165,14 @@ select.input {
 
 .tickets-label {
   font-size: 14px;
-  color: #a99fc4;
+  color: #666;
   margin-bottom: 4px;
 }
 
 #ticketCount {
   font-size: 48px;
   font-weight: 800;
-  color: #f7d10e;
-}
-
-/* Scan button */
-.scan-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  padding: 16px;
-  font-size: 16px;
-  font-weight: 700;
-  border-radius: 12px;
-  border: 2px solid #3d2d7a;
-  background: #211551;
-  color: #fff;
-  cursor: pointer;
-  -webkit-tap-highlight-color: transparent;
-}
-
-.scan-btn:active {
-  background: #3d2d7a;
-}
-
-.scan-btn input {
-  display: none;
-}
-
-.scan-btn.disabled {
-  opacity: 0.5;
-  pointer-events: none;
+  color: #1a1a1a;
 }
 
 /* Team selector */
@@ -185,9 +185,9 @@ select.input {
 .team-btn {
   padding: 14px 12px;
   border-radius: 12px;
-  border: 2px solid #3d2d7a;
-  background: #211551;
-  color: #fff;
+  border: 2px solid #e5e5e5;
+  background: #f5f5f5;
+  color: #1a1a1a;
   font-size: 14px;
   font-weight: 700;
   cursor: pointer;
@@ -207,11 +207,13 @@ select.input {
 .team-btn.red.selected {
   background: #dc2626;
   border-color: #dc2626;
+  color: #fff;
 }
 
 .team-btn.blue.selected {
   background: #2563eb;
   border-color: #2563eb;
+  color: #fff;
 }
 
 .team-btn:active {
@@ -226,15 +228,15 @@ select.input {
   font-weight: 700;
   border-radius: 12px;
   border: none;
-  background: #f7d10e;
-  color: #211551;
+  background: #1a1a1a;
+  color: #fff;
   cursor: pointer;
   margin-top: 12px;
   -webkit-tap-highlight-color: transparent;
 }
 
 .submit-btn:active {
-  background: #d4b00c;
+  background: #333;
 }
 
 /* Scan Status */
@@ -247,21 +249,21 @@ select.input {
 }
 
 .scan-status.scanning {
-  color: #a99fc4;
+  color: #666;
 }
 
 .scan-status.success {
-  color: #22c55e;
+  color: #16a34a;
 }
 
 .scan-status.error {
-  color: #ef4444;
+  color: #dc2626;
 }
 
 /* Leaderboard */
 .leaderboard {
   width: 100%;
-  background: #211551;
+  background: #f5f5f5;
   border-radius: 12px;
   overflow: hidden;
   border-collapse: collapse;
@@ -272,10 +274,10 @@ select.input {
   text-align: left;
   font-size: 12px;
   font-weight: 600;
-  color: #a99fc4;
+  color: #666;
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  background: #1a1040;
+  background: #eee;
 }
 
 .leaderboard th:last-child {
@@ -284,7 +286,7 @@ select.input {
 
 .leaderboard td {
   padding: 14px 16px;
-  border-top: 1px solid #3d2d7a;
+  border-top: 1px solid #e5e5e5;
   font-size: 15px;
 }
 
@@ -295,7 +297,7 @@ select.input {
 .leaderboard td:last-child {
   text-align: right;
   font-weight: 800;
-  color: #f7d10e;
+  color: #1a1a1a;
 }
 
 .leaderboard tbody tr:first-child td {
@@ -322,14 +324,14 @@ select.input {
 .delete-section {
   margin-top: 32px;
   padding-top: 24px;
-  border-top: 1px solid #3d2d7a;
+  border-top: 1px solid #e5e5e5;
   text-align: center;
 }
 
 .delete-btn {
   background: transparent;
-  border: 1px solid #3d2d7a;
-  color: #a99fc4;
+  border: 1px solid #e5e5e5;
+  color: #999;
   padding: 12px 20px;
   font-size: 14px;
   border-radius: 8px;
@@ -338,7 +340,7 @@ select.input {
 }
 
 .delete-btn:active {
-  background: rgba(239, 68, 68, 0.2);
-  border-color: #ef4444;
-  color: #ef4444;
+  background: rgba(239, 68, 68, 0.1);
+  border-color: #dc2626;
+  color: #dc2626;
 }
