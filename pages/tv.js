@@ -57,6 +57,14 @@ async function pollOnce() {
 }
 
 function renderStats(data) {
+  // Render team totals
+  if (data.teams) {
+    document.getElementById("redTickets").textContent = data.teams.red.tickets;
+    document.getElementById("redCount").textContent = `${data.teams.red.count} member${data.teams.red.count !== 1 ? 's' : ''}`;
+    document.getElementById("blueTickets").textContent = data.teams.blue.tickets;
+    document.getElementById("blueCount").textContent = `${data.teams.blue.count} member${data.teams.blue.count !== 1 ? 's' : ''}`;
+  }
+
   if (!data.cells || data.total_submissions === 0) {
     elEasiest.innerHTML = '<div class="statItem muted">No data yet</div>';
     elHardest.innerHTML = '<div class="statItem muted">No data yet</div>';
