@@ -100,6 +100,15 @@ body {
   border: 1px solid rgba(247, 209, 14, 0.1);
   background: rgba(33, 21, 81, 0.5);
   transition: all 0.3s ease;
+  border-left: 4px solid transparent;
+}
+
+.row.team-red {
+  border-left-color: #dc2626;
+}
+
+.row.team-blue {
+  border-left-color: #2563eb;
 }
 
 .rank { font-size: 26px; font-weight: 900; color: rgba(255,255,255,0.88); }

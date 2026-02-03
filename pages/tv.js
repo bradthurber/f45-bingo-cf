@@ -107,7 +107,8 @@ function render(rows) {
     const changed = typeof prevScore === "number" && prevScore !== r.tickets_total;
 
     const row = document.createElement("div");
-    row.className = "row" + (idx === 0 && leaderChanged ? " newLeader" : "") + (changed ? " changed" : "");
+    const teamClass = r.team === "red" ? " team-red" : r.team === "blue" ? " team-blue" : "";
+    row.className = "row" + teamClass + (idx === 0 && leaderChanged ? " newLeader" : "") + (changed ? " changed" : "");
     row.innerHTML = `
       <div class="rank">#${idx + 1}</div>
       <div>
