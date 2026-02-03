@@ -149,29 +149,36 @@ body {
 
 /* New leader animation */
 .row.newLeader {
-  animation: newLeader 2s ease-in-out;
+  animation: newLeader 2.5s ease-in-out;
   border-color: var(--text);
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
 }
 
 @keyframes newLeader {
-  0% { transform: scale(1); box-shadow: 0 0 0 rgba(0, 0, 0, 0); }
-  15% { transform: scale(1.03); box-shadow: 0 0 30px rgba(0, 0, 0, 0.2); }
-  30% { transform: scale(1.01); box-shadow: 0 0 20px rgba(0, 0, 0, 0.15); }
-  45% { transform: scale(1.02); box-shadow: 0 0 25px rgba(0, 0, 0, 0.18); }
-  100% { transform: scale(1); box-shadow: 0 0 20px rgba(0, 0, 0, 0.15); }
+  0% { transform: scale(1) rotate(0deg); box-shadow: 0 0 0 rgba(0, 0, 0, 0); background: #fff; }
+  10% { transform: scale(1.08) rotate(-1deg); box-shadow: 0 0 40px rgba(26, 26, 26, 0.4); background: #fff4e6; }
+  20% { transform: scale(1.05) rotate(1deg); box-shadow: 0 0 35px rgba(26, 26, 26, 0.35); background: #fffbf0; }
+  30% { transform: scale(1.06) rotate(-0.5deg); box-shadow: 0 0 38px rgba(26, 26, 26, 0.38); background: #fff8eb; }
+  40% { transform: scale(1.04) rotate(0.5deg); box-shadow: 0 0 33px rgba(26, 26, 26, 0.33); background: #fffcf5; }
+  50% { transform: scale(1.05) rotate(0deg); box-shadow: 0 0 36px rgba(26, 26, 26, 0.36); background: #fff6e8; }
+  60% { transform: scale(1.03) rotate(0deg); box-shadow: 0 0 30px rgba(26, 26, 26, 0.3); background: #fffaf2; }
+  70% { transform: scale(1.02) rotate(0deg); box-shadow: 0 0 25px rgba(26, 26, 26, 0.25); background: #fffdf8; }
+  85% { transform: scale(1.01) rotate(0deg); box-shadow: 0 0 22px rgba(26, 26, 26, 0.2); background: #f9f9f9; }
+  100% { transform: scale(1) rotate(0deg); box-shadow: 0 0 20px rgba(0, 0, 0, 0.15); background: #f9f9f9; }
 }
 
 /* Score changed animation */
 .row.changed {
-  animation: pulse 1.5s ease-in-out;
+  animation: pulse 1.2s ease-out;
 }
 
 @keyframes pulse {
-  0% { transform: scale(1); background: #fff; }
-  25% { transform: scale(1.02); background: #f0f0f0; }
-  50% { transform: scale(1.01); background: #f5f5f5; }
-  100% { transform: scale(1); background: #fff; }
+  0% { transform: scale(1); background: #fff; box-shadow: 0 0 0 rgba(26, 26, 26, 0); }
+  20% { transform: scale(1.04); background: #e6f7ff; box-shadow: 0 0 20px rgba(37, 99, 235, 0.3); }
+  40% { transform: scale(1.02); background: #f0f9ff; box-shadow: 0 0 15px rgba(37, 99, 235, 0.2); }
+  60% { transform: scale(1.03); background: #e8f4ff; box-shadow: 0 0 18px rgba(37, 99, 235, 0.25); }
+  80% { transform: scale(1.01); background: #f5faff; box-shadow: 0 0 10px rgba(37, 99, 235, 0.15); }
+  100% { transform: scale(1); background: #fff; box-shadow: 0 0 0 rgba(26, 26, 26, 0); }
 }
 
 /* Team Battle */
@@ -299,12 +306,16 @@ body {
 .ticker.excited {
   background: #f5f5f5;
   border-color: var(--text);
-  animation: tickerPulse 0.5s ease-in-out 3;
+  animation: tickerCelebrate 0.6s ease-in-out 4;
 }
 
-@keyframes tickerPulse {
-  0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.02); }
+@keyframes tickerCelebrate {
+  0% { transform: scale(1) translateY(0); box-shadow: 0 0 0 rgba(26, 26, 26, 0); }
+  15% { transform: scale(1.03) translateY(-3px); box-shadow: 0 4px 15px rgba(26, 26, 26, 0.15); }
+  30% { transform: scale(0.99) translateY(1px); box-shadow: 0 2px 8px rgba(26, 26, 26, 0.1); }
+  45% { transform: scale(1.02) translateY(-2px); box-shadow: 0 3px 12px rgba(26, 26, 26, 0.12); }
+  60% { transform: scale(1) translateY(0); box-shadow: 0 2px 8px rgba(26, 26, 26, 0.08); }
+  100% { transform: scale(1) translateY(0); box-shadow: 0 0 0 rgba(26, 26, 26, 0); }
 }
 
 .disclaimer {
