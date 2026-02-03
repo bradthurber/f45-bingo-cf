@@ -138,7 +138,9 @@ body {
 /* First place special styling */
 .row:first-child {
   background: #f9f9f9;
-  border-color: var(--text);
+  border-top-color: var(--text);
+  border-right-color: var(--text);
+  border-bottom-color: var(--text);
 }
 
 .row:first-child .rank {
