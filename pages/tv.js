@@ -108,11 +108,13 @@ function render(rows) {
 
     const row = document.createElement("div");
     const teamClass = r.team === "red" ? " team-red" : r.team === "blue" ? " team-blue" : "";
+    const teamBadge = r.team === "red" ? '<span class="team-badge red">RED</span>' :
+                      r.team === "blue" ? '<span class="team-badge blue">BLUE</span>' : '';
     row.className = "row" + teamClass + (idx === 0 && leaderChanged ? " newLeader" : "") + (changed ? " changed" : "");
     row.innerHTML = `
       <div class="rank">#${idx + 1}</div>
       <div>
-        <div class="name">${escapeHtml(r.display_name || "")}</div>
+        <div class="name">${escapeHtml(r.display_name || "")} ${teamBadge}</div>
         <div class="meta">squares ${r.marked_count}, bingos ${r.bingo_count}${r.full_card ? ", full card" : ""}</div>
       </div>
       <div class="score">${r.tickets_total}</div>
