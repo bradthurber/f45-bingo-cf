@@ -8,6 +8,7 @@ const LS_NAME = "f45_display_name";
 const LS_MASK = "f45_marked_mask";
 const LS_WEEK = "f45_week_id";
 const LS_DEVICE = "f45_device_id";
+const LS_TEAM = "f45_team";
 
 /* ===========================
    STATE
@@ -16,6 +17,7 @@ const LS_DEVICE = "f45_device_id";
 let markedMask = 0n;
 let cardCells = null;
 let currentWeek = null;
+let currentTeam = null;
 
 /* ===========================
    HELPERS
@@ -84,6 +86,27 @@ function loadName() {
 
 function saveName() {
   localStorage.setItem(LS_NAME, qs("displayName").value.trim());
+}
+
+/* ===========================
+   TEAM
+=========================== */
+
+function loadTeam() {
+  const saved = localStorage.getItem(LS_TEAM);
+  if (saved) {
+    currentTeam = saved;
+  }
+}
+
+function saveTeam(team) {
+  currentTeam = team;
+  localStorage.setItem(LS_TEAM, team);
+}
+
+function renderTeamSelector() {
+  qs("teamRed").classList.toggle("selected", currentTeam === "red");
+  qs("teamBlue").classList.toggle("selected", currentTeam === "blue");
 }
 
 /* ===========================
@@ -224,9 +247,15 @@ async function submitBoard() {
     return;
   }
 
+  if (!currentTeam) {
+    alert("Please select your team (Red or Blue).");
+    return;
+  }
+
   const payload = {
     week_id: currentWeek,
     display_name: name,
+    team: currentTeam,
     marked_mask: markedMask.toString()
   };
 
@@ -296,8 +325,10 @@ async function refreshLeaderboard() {
 
     data.rows.forEach(r => {
       const tr = document.createElement("tr");
+      const teamDot = r.team === "red" ? '<span class="team-dot red"></span>' :
+                      r.team === "blue" ? '<span class="team-dot blue"></span>' : '';
       tr.innerHTML = `
-        <td>${r.display_name}</td>
+        <td>${teamDot}${r.display_name}</td>
         <td>${r.tickets_total}</td>
       `;
       tbody.appendChild(tr);
@@ -396,8 +427,10 @@ window.addEventListener("DOMContentLoaded", () => {
   loadWeek();
   loadName();
   loadMask();
+  loadTeam();
 
   renderWeekDisplay();
+  renderTeamSelector();
 
   document.querySelectorAll(".cell").forEach((cell, idx) => {
     cell.addEventListener("click", () => toggleCell(idx));
@@ -410,6 +443,16 @@ window.addEventListener("DOMContentLoaded", () => {
   });
 
   qs("deleteBtn").addEventListener("click", deleteSubmission);
+
+  qs("teamRed").addEventListener("click", () => {
+    saveTeam("red");
+    renderTeamSelector();
+  });
+
+  qs("teamBlue").addEventListener("click", () => {
+    saveTeam("blue");
+    renderTeamSelector();
+  });
 
   renderGrid();
   renderTickets();

@@ -2,6 +2,7 @@ CREATE TABLE IF NOT EXISTS submissions (
   week_id TEXT NOT NULL,
   device_id TEXT NOT NULL,
   display_name TEXT NOT NULL,
+  team TEXT,
   marked_mask TEXT NOT NULL,
   marked_count INTEGER NOT NULL,
   bingo_count INTEGER NOT NULL,

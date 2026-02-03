@@ -120,7 +120,7 @@ async function handleLeaderboard(env, url) {
   if (!week) return json({ error: "missing_week" }, 400);
 
   const stmt = env.DB.prepare(
-    "SELECT week_id, display_name, tickets_total, marked_count, bingo_count, full_card, updated_at " +
+    "SELECT week_id, display_name, team, tickets_total, marked_count, bingo_count, full_card, updated_at " +
     "FROM submissions WHERE week_id = ? " +
     "ORDER BY tickets_total DESC, updated_at DESC LIMIT 50"
   ).bind(week);
@@ -144,6 +144,7 @@ async function handleSubmit(request, env) {
   const weekId = safeText(body.week_id, 32);
   const displayName = safeText(body.display_name, 40);
   const markedMask = safeText(body.marked_mask, 64);
+  const team = safeText(body.team, 10) || null;
 
   if (!weekId || !displayName || !markedMask) {
     return json({ error: "missing_fields" }, 400);
@@ -157,10 +158,11 @@ async function handleSubmit(request, env) {
 
   const stmt = env.DB.prepare(
     "INSERT INTO submissions " +
-    "(week_id, device_id, display_name, marked_mask, marked_count, bingo_count, full_card, tickets_total, updated_at) " +
-    "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?) " +
+    "(week_id, device_id, display_name, team, marked_mask, marked_count, bingo_count, full_card, tickets_total, updated_at) " +
+    "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?) " +
     "ON CONFLICT(week_id, device_id) DO UPDATE SET " +
     "display_name = excluded.display_name, " +
+    "team = excluded.team, " +
     "marked_mask = excluded.marked_mask, " +
     "marked_count = excluded.marked_count, " +
     "bingo_count = excluded.bingo_count, " +
@@ -171,6 +173,7 @@ async function handleSubmit(request, env) {
     weekId,
     deviceId,
     displayName,
+    team,
     markedMask,
     result.markedCount,
     result.bingoCount,
@@ -415,11 +418,23 @@ async function handleStats(env, url) {
 
   // Get all submissions for this week
   const submissions = await env.DB.prepare(
-    "SELECT marked_mask FROM submissions WHERE week_id = ?"
+    "SELECT marked_mask, team, tickets_total FROM submissions WHERE week_id = ?"
   ).bind(week).all();
 
   const rows = submissions.results || [];
   const totalSubmissions = rows.length;
+
+  // Calculate team totals
+  const teams = { red: { count: 0, tickets: 0 }, blue: { count: 0, tickets: 0 } };
+  for (const row of rows) {
+    if (row.team === "red") {
+      teams.red.count++;
+      teams.red.tickets += row.tickets_total;
+    } else if (row.team === "blue") {
+      teams.blue.count++;
+      teams.blue.tickets += row.tickets_total;
+    }
+  }
 
   // Count how many times each cell is marked
   const cellCounts = new Array(25).fill(0);
@@ -458,6 +473,7 @@ async function handleStats(env, url) {
   return json({
     week_id: week,
     total_submissions: totalSubmissions,
+    teams,
     cells
   });
 }
