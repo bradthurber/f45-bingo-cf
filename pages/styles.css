@@ -52,6 +52,14 @@ h2 {
   color: #1a1a1a;
 }
 
+.instructions {
+  text-align: center;
+  font-size: 14px;
+  color: #666;
+  margin: 0 0 8px 0;
+  line-height: 1.4;
+}
+
 .row {
   margin: 16px 0;
 }
