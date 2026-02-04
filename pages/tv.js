@@ -15,6 +15,7 @@ let weekId = getWeekFromUrl() || getCurrentChallengeWeek();
 let lastSnapshot = new Map();
 let lastLeader = null;
 let lastTickMsg = "Waiting for updates...";
+let lastPositions = new Map(); // Track previous positions
 
 init();
 
@@ -95,7 +96,11 @@ function renderStats(data) {
 
 function render(rows) {
   const current = new Map();
-  rows.forEach((r) => current.set(r.display_name, r.tickets_total));
+  const currentPositions = new Map();
+  rows.forEach((r, idx) => {
+    current.set(r.display_name, r.tickets_total);
+    currentPositions.set(r.display_name, idx);
+  });
 
   const leader = rows[0] ? rows[0].display_name : null;
   const leaderChanged = leader && leader !== lastLeader;
@@ -105,6 +110,9 @@ function render(rows) {
   rows.forEach((r, idx) => {
     const prevScore = lastSnapshot.get(r.display_name);
     const changed = typeof prevScore === "number" && prevScore !== r.tickets_total;
+    const prevPosition = lastPositions.get(r.display_name);
+    const isNewEntry = prevPosition === undefined;
+    const positionChanged = prevPosition !== undefined && prevPosition !== idx;
 
     const row = document.createElement("div");
     const teamClass = r.team === "red" ? " team-red" : r.team === "blue" ? " team-blue" : "";
@@ -121,18 +129,20 @@ function render(rows) {
     `;
     elRows.appendChild(row);
 
-    // Animate row entrance with anime.js
-    anime({
-      targets: row,
-      translateX: [-50, 0],
-      opacity: [0, 1],
-      duration: 600,
-      delay: idx * 50,
-      easing: 'easeOutElastic(1, .8)'
-    });
+    // Only animate new entries or position changes
+    if (isNewEntry || positionChanged) {
+      anime({
+        targets: row,
+        translateX: [-50, 0],
+        opacity: [0, 1],
+        duration: 600,
+        delay: idx * 50,
+        easing: 'easeOutElastic(1, .8)'
+      });
+    }
 
-    // Extra bounce for changed scores
-    if (changed) {
+    // Extra bounce for changed scores (but not if new leader - avoid double animation)
+    if (changed && !(idx === 0 && leaderChanged)) {
       const scoreEl = row.querySelector('.score');
       anime({
         targets: scoreEl,
@@ -143,12 +153,12 @@ function render(rows) {
       });
     }
 
-    // HUGE animation for new leader
+    // HUGE animation for new leader (no scale to avoid layout shift)
     if (idx === 0 && leaderChanged) {
       anime({
         targets: row,
-        scale: [0.9, 1.1, 1],
-        duration: 1200,
+        rotate: [0, 2, -2, 0],
+        duration: 1000,
         easing: 'easeOutElastic(1, .5)'
       });
     }
@@ -172,6 +182,7 @@ function render(rows) {
 
   lastSnapshot = current;
   lastLeader = leader;
+  lastPositions = currentPositions;
 }
 
 function celebrateNewLeader() {
