@@ -255,18 +255,18 @@ body {
 .statsList {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 4px;
 }
 
 .statItem {
   display: grid;
-  grid-template-columns: 50px 1fr;
-  gap: 10px;
+  grid-template-columns: 45px 1fr;
+  gap: 8px;
   align-items: center;
-  font-size: 14px;
-  padding: 8px 10px;
+  font-size: 13px;
+  padding: 6px 8px;
   background: #fff;
-  border-radius: 8px;
+  border-radius: 6px;
   border: 1px solid var(--border);
 }
 
@@ -278,7 +278,7 @@ body {
 .statPct {
   font-weight: 800;
   color: var(--text);
-  font-size: 16px;
+  font-size: 15px;
 }
 
 .statLabel {
