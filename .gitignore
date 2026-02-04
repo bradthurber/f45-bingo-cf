@@ -6,6 +6,7 @@ node_modules/
 
 # local dev secrets
 .dev.vars
+upload-card.sh
 
 # OS/editor noise
 .DS_Store
