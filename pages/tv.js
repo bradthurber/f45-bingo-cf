@@ -129,8 +129,8 @@ function render(rows) {
     `;
     elRows.appendChild(row);
 
-    // Only animate new entries or position changes
-    if (isNewEntry || positionChanged) {
+    // Only animate new entries or position changes (but not if new leader - CSS handles that)
+    if ((isNewEntry || positionChanged) && !(idx === 0 && leaderChanged)) {
       anime({
         targets: row,
         translateX: [-50, 0],
@@ -141,7 +141,7 @@ function render(rows) {
       });
     }
 
-    // Extra bounce for changed scores (but not if new leader - avoid double animation)
+    // Extra bounce for changed scores (but not if new leader - CSS handles that)
     if (changed && !(idx === 0 && leaderChanged)) {
       const scoreEl = row.querySelector('.score');
       anime({
@@ -153,15 +153,8 @@ function render(rows) {
       });
     }
 
-    // HUGE animation for new leader (no scale to avoid layout shift)
-    if (idx === 0 && leaderChanged) {
-      anime({
-        targets: row,
-        rotate: [0, 2, -2, 0],
-        duration: 1000,
-        easing: 'easeOutElastic(1, .5)'
-      });
-    }
+    // New leader animation is handled entirely by CSS (.row.newLeader)
+    // Don't apply anime.js transforms to avoid conflicts
   });
 
   const tick = computeTickerMessage(rows, leaderChanged);
