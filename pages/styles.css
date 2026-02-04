@@ -102,6 +102,7 @@ select.input {
   background: #f5f5f5;
   color: #1a1a1a;
   cursor: pointer;
+  margin-top: 24px;
   -webkit-tap-highlight-color: transparent;
 }
 
