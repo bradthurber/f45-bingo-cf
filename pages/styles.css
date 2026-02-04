@@ -18,10 +18,15 @@ body {
   padding-bottom: 32px;
 }
 
+.header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
 h1 {
   font-size: 28px;
   font-weight: 800;
-  margin: 0 0 20px 0;
+  margin: 0 0 4px 0;
   text-align: center;
   color: #1a1a1a;
 }
@@ -37,13 +42,13 @@ h2 {
   text-align: center;
   font-size: 14px;
   color: #666;
-  padding: 12px;
-  margin-bottom: 16px;
+  padding: 0;
+  margin: 0;
 }
 
 .week-display.has-week {
-  font-size: 20px;
-  font-weight: 800;
+  font-size: 16px;
+  font-weight: 700;
   color: #1a1a1a;
 }
 
