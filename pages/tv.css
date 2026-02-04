@@ -10,11 +10,13 @@
 }
 
 * { box-sizing: border-box; }
-body {
+html, body {
   margin: 0;
   font-family: system-ui, sans-serif;
   background: var(--bg);
   color: var(--text);
+  height: 100vh;
+  overflow: hidden;
 }
 
 .tv { padding: 24px; height: 100vh; display: flex; flex-direction: column; gap: 18px; }
@@ -73,7 +75,7 @@ body {
   min-height: 0;
 }
 
-.panel.right { background: var(--panel2); }
+.panel.right { background: var(--panel2); overflow: hidden; }
 
 .panelTitle {
   font-size: 18px;
@@ -87,6 +89,8 @@ body {
   display: flex;
   flex-direction: column;
   gap: 10px;
+  flex: 1;
+  min-height: 0;
 }
 
 .row {
