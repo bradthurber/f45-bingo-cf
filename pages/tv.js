@@ -74,8 +74,8 @@ function renderStats(data) {
   // Sort by percentage
   const sorted = [...data.cells].filter(c => c.label).sort((a, b) => b.pct - a.pct);
 
-  // Top 3 easiest (highest completion)
-  const easiest = sorted.slice(0, 3);
+  // Top 5 easiest (highest completion)
+  const easiest = sorted.slice(0, 5);
   elEasiest.innerHTML = easiest.map(c => `
     <div class="statItem">
       <span class="statPct">${c.pct}%</span>
@@ -83,8 +83,8 @@ function renderStats(data) {
     </div>
   `).join("");
 
-  // Top 3 hardest (lowest completion, but must have label)
-  const hardest = sorted.slice(-3).reverse();
+  // Top 5 hardest (lowest completion, but must have label)
+  const hardest = sorted.slice(-5).reverse();
   elHardest.innerHTML = hardest.map(c => `
     <div class="statItem">
       <span class="statPct">${c.pct}%</span>
