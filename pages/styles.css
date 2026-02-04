@@ -55,9 +55,23 @@ h2 {
 .instructions {
   text-align: center;
   font-size: 14px;
-  color: #666;
+  color: #1a1a1a;
   margin: 0 0 8px 0;
   line-height: 1.4;
+  font-weight: 500;
+  padding: 12px 16px;
+  background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+  border-radius: 10px;
+  animation: subtle-pulse 2.5s ease-in-out infinite;
+}
+
+@keyframes subtle-pulse {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(37, 99, 235, 0.2);
+  }
+  50% {
+    box-shadow: 0 0 0 8px rgba(37, 99, 235, 0);
+  }
 }
 
 .row {
