@@ -98,10 +98,8 @@ function renderWeekDisplay() {
   const display = qs("weekDisplay");
   if (currentWeek) {
     display.textContent = formatWeek(currentWeek);
-    display.classList.add("has-week");
   } else {
-    display.textContent = "Scan your card to start";
-    display.classList.remove("has-week");
+    display.textContent = "";
   }
 }
 

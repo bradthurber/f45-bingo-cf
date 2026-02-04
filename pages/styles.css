@@ -39,16 +39,7 @@ h2 {
 }
 
 .week-display {
-  text-align: center;
-  font-size: 14px;
-  color: #666;
-  padding: 0;
-  margin: 0;
-}
-
-.week-display.has-week {
-  font-size: 16px;
-  font-weight: 700;
+  font-weight: 800;
   color: #1a1a1a;
 }
 
