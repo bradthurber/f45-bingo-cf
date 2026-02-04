@@ -195,16 +195,16 @@ function getWeekFromUrl() {
 }
 
 function getCurrentChallengeWeek() {
-  // 2026 Challenge Schedule:
-  // Week 1: Feb 2-7, Week 2: Feb 9-14, Week 3: Feb 16-21
-  // Week 4: Feb 23-28, Week 5: Mar 2-7, Week 6: Mar 9-14
+  // 2026 Challenge Schedule (Mon-Sun):
+  // Week 1: Feb 2-8, Week 2: Feb 9-15, Week 3: Feb 16-22
+  // Week 4: Feb 23-Mar 1, Week 5: Mar 2-8, Week 6: Mar 9-15
   const schedule = [
-    { week: "week1", start: new Date(2026, 1, 2), end: new Date(2026, 1, 7) },
-    { week: "week2", start: new Date(2026, 1, 9), end: new Date(2026, 1, 14) },
-    { week: "week3", start: new Date(2026, 1, 16), end: new Date(2026, 1, 21) },
-    { week: "week4", start: new Date(2026, 1, 23), end: new Date(2026, 1, 28) },
-    { week: "week5", start: new Date(2026, 2, 2), end: new Date(2026, 2, 7) },
-    { week: "week6", start: new Date(2026, 2, 9), end: new Date(2026, 2, 14) },
+    { week: "week1", start: new Date(2026, 1, 2), end: new Date(2026, 1, 8) },
+    { week: "week2", start: new Date(2026, 1, 9), end: new Date(2026, 1, 15) },
+    { week: "week3", start: new Date(2026, 1, 16), end: new Date(2026, 1, 22) },
+    { week: "week4", start: new Date(2026, 1, 23), end: new Date(2026, 2, 1) },
+    { week: "week5", start: new Date(2026, 2, 2), end: new Date(2026, 2, 8) },
+    { week: "week6", start: new Date(2026, 2, 9), end: new Date(2026, 2, 15) },
   ];
 
   const today = new Date();
