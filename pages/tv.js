@@ -120,6 +120,38 @@ function render(rows) {
       <div class="score">${r.tickets_total}</div>
     `;
     elRows.appendChild(row);
+
+    // Animate row entrance with anime.js
+    anime({
+      targets: row,
+      translateX: [-50, 0],
+      opacity: [0, 1],
+      duration: 600,
+      delay: idx * 50,
+      easing: 'easeOutElastic(1, .8)'
+    });
+
+    // Extra bounce for changed scores
+    if (changed) {
+      const scoreEl = row.querySelector('.score');
+      anime({
+        targets: scoreEl,
+        scale: [1, 1.3, 1],
+        duration: 800,
+        delay: 300,
+        easing: 'easeOutElastic(1, .6)'
+      });
+    }
+
+    // HUGE animation for new leader
+    if (idx === 0 && leaderChanged) {
+      anime({
+        targets: row,
+        scale: [0.9, 1.1, 1],
+        duration: 1200,
+        easing: 'easeOutElastic(1, .5)'
+      });
+    }
   });
 
   const tick = computeTickerMessage(rows, leaderChanged);
@@ -133,8 +165,43 @@ function render(rows) {
     elTicker.textContent = lastTickMsg;
   }
 
+  // Celebrate new leader with confetti!
+  if (leaderChanged) {
+    celebrateNewLeader();
+  }
+
   lastSnapshot = current;
   lastLeader = leader;
+}
+
+function celebrateNewLeader() {
+  // Big confetti burst
+  confetti({
+    particleCount: 150,
+    spread: 100,
+    origin: { y: 0.4 },
+    colors: ['#FFD700', '#FFA500', '#FF6347', '#1a1a1a']
+  });
+
+  // Second burst slightly delayed
+  setTimeout(() => {
+    confetti({
+      particleCount: 100,
+      spread: 80,
+      origin: { y: 0.5 },
+      colors: ['#FFD700', '#FFA500', '#FF6347', '#1a1a1a']
+    });
+  }, 250);
+
+  // Third burst for maximum celebration
+  setTimeout(() => {
+    confetti({
+      particleCount: 80,
+      spread: 60,
+      origin: { y: 0.6 },
+      colors: ['#FFD700', '#FFA500', '#FF6347', '#1a1a1a']
+    });
+  }, 500);
 }
 
 function computeTickerMessage(rows, leaderChanged) {
