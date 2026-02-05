@@ -215,27 +215,10 @@ function spin() {
   winnerDiv.classList.add("hidden");
   currentWinner = null;
 
-  // Pick winner (weighted random)
-  const winner = pickWeightedRandom();
-  currentWinner = winner;
-
-  // Find winner's index and calculate angle to their segment center
-  const winnerIndex = participants.indexOf(winner);
-  let angleToWinnerCenter = 0;
-  for (let i = 0; i < winnerIndex; i++) {
-    angleToWinnerCenter += (participants[i].tickets_total / totalTickets) * Math.PI * 2;
-  }
-  angleToWinnerCenter += (winner.tickets_total / totalTickets) * Math.PI * 2 / 2;
-
-  // Pointer is at top. To land winner there, we need to rotate so winner center ends at top.
-  // At rotation=0, winner center is at angleToWinnerCenter (measured clockwise from right).
-  // Top is at -PI/2 (or 3*PI/2). We need to spin so that winner moves to top.
-  // Final rotation R means first segment starts at R, so winner center is at R + angleToWinnerCenter.
-  // We want: R + angleToWinnerCenter ≡ -PI/2 (mod 2*PI)
-  // But wheel spins multiple times, landing at that spot.
+  // Spin to a random position, then determine winner based on where it lands
   const spins = 5 + Math.random() * 3;
-  const targetStop = (Math.PI * 3 / 2) + angleToWinnerCenter;
-  const totalRotation = spins * Math.PI * 2 + targetStop;
+  const randomStop = Math.random() * Math.PI * 2;
+  const totalRotation = spins * Math.PI * 2 + randomStop;
 
   // Animate
   const duration = 5000;
@@ -255,14 +238,47 @@ function spin() {
     if (progress < 1) {
       requestAnimationFrame(animate);
     } else {
-      // Done spinning
+      // Done spinning - determine winner based on where pointer lands
       isSpinning = false;
       spinBtn.disabled = false;
+
+      const winner = getWinnerAtRotation(totalRotation);
+      currentWinner = winner;
       showWinner(winner);
     }
   }
 
   animate();
+}
+
+function getWinnerAtRotation(rotation) {
+  // Pointer is at top (3*PI/2 or -PI/2)
+  // At this rotation, segment 0 starts at `rotation`
+  // Find which segment contains the pointer angle
+
+  const pointerAngle = Math.PI * 3 / 2; // top
+
+  // Normalize rotation to 0-2PI range
+  let normalizedRotation = rotation % (Math.PI * 2);
+  if (normalizedRotation < 0) normalizedRotation += Math.PI * 2;
+
+  // The pointer points to angle `pointerAngle`, but segments start at `rotation`
+  // So relative to the wheel, the pointer is at: pointerAngle - rotation
+  let relativePointer = pointerAngle - normalizedRotation;
+  if (relativePointer < 0) relativePointer += Math.PI * 2;
+
+  // Now find which segment contains relativePointer
+  let angleSum = 0;
+  for (const p of participants) {
+    const sliceAngle = (p.tickets_total / totalTickets) * Math.PI * 2;
+    if (relativePointer < angleSum + sliceAngle) {
+      return p;
+    }
+    angleSum += sliceAngle;
+  }
+
+  // Fallback to last participant
+  return participants[participants.length - 1];
 }
 
 function pickWeightedRandom() {
