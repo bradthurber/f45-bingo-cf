@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Challenge Bingo</title>
 
-  <link rel="stylesheet" href="styles.css?v=7" />
+  <link rel="stylesheet" href="styles.css?v=8" />
 </head>
 <body>
 
@@ -100,6 +100,34 @@
         <!-- rows injected by JS -->
       </tbody>
     </table>
+
+    <!-- Team Battle -->
+    <h2>Team Battle</h2>
+    <div class="team-battle">
+      <div class="team-score red">
+        <div class="team-label">Red Team</div>
+        <div id="redTickets" class="team-total">0</div>
+        <div id="redCount" class="team-members">0 members</div>
+      </div>
+      <div class="team-vs">VS</div>
+      <div class="team-score blue">
+        <div class="team-label">Blue Team</div>
+        <div id="blueTickets" class="team-total">0</div>
+        <div id="blueCount" class="team-members">0 members</div>
+      </div>
+    </div>
+
+    <!-- Challenge Stats -->
+    <div class="challenge-stats">
+      <div class="stat-column">
+        <h3>Easiest Challenges</h3>
+        <div id="easiestList" class="stat-list">Loading...</div>
+      </div>
+      <div class="stat-column">
+        <h3>Toughest Challenges</h3>
+        <div id="hardestList" class="stat-list">Loading...</div>
+      </div>
+    </div>
 
     <!-- Delete -->
     <div class="delete-section">

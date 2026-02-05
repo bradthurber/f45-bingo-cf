@@ -317,6 +317,7 @@ async function submitBoard() {
 
     await corsJson(res);
     await refreshLeaderboard();
+    await refreshStats();
   } catch (err) {
     alert("Submit failed. Please try again.");
   }
@@ -349,6 +350,7 @@ async function deleteSubmission() {
     renderGrid();
     renderTickets();
     await refreshLeaderboard();
+    await refreshStats();
 
     alert("You have been removed from the leaderboard.");
   } catch (err) {
@@ -384,6 +386,61 @@ async function refreshLeaderboard() {
   }
 }
 
+async function refreshStats() {
+  if (!currentWeek) return;
+
+  try {
+    const res = await fetch(`${API_BASE}/api/stats?week=${encodeURIComponent(currentWeek)}`);
+    if (!res.ok) return;
+    const data = await res.json();
+
+    // Team battle
+    if (data.teams) {
+      qs("redTickets").textContent = data.teams.red.tickets;
+      qs("redCount").textContent = `${data.teams.red.count} member${data.teams.red.count !== 1 ? 's' : ''}`;
+      qs("blueTickets").textContent = data.teams.blue.tickets;
+      qs("blueCount").textContent = `${data.teams.blue.count} member${data.teams.blue.count !== 1 ? 's' : ''}`;
+    }
+
+    // Challenge stats
+    const easiestEl = qs("easiestList");
+    const hardestEl = qs("hardestList");
+
+    if (!data.cells || data.total_submissions === 0) {
+      easiestEl.textContent = "No data yet";
+      hardestEl.textContent = "No data yet";
+      return;
+    }
+
+    const sorted = [...data.cells].filter(c => c.label).sort((a, b) => b.pct - a.pct);
+    const easiest = sorted.slice(0, 5);
+    const hardest = sorted.slice(-5).reverse();
+
+    easiestEl.innerHTML = easiest.map(c => `
+      <div class="stat-item">
+        <span class="stat-pct">${c.pct}%</span>
+        <span class="stat-label">${escapeHtml(c.label)}</span>
+      </div>
+    `).join("");
+
+    hardestEl.innerHTML = hardest.map(c => `
+      <div class="stat-item">
+        <span class="stat-pct">${c.pct}%</span>
+        <span class="stat-label">${escapeHtml(c.label)}</span>
+      </div>
+    `).join("");
+  } catch {
+    // Ignore stats errors
+  }
+}
+
+function escapeHtml(s) {
+  return String(s)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;");
+}
+
 /* ===========================
    SCAN
 =========================== */
@@ -417,6 +474,7 @@ async function scanImage(file) {
       renderWeekDisplay();
       await fetchCardDefinition(data.week);
       await refreshLeaderboard();
+      await refreshStats();
     }
 
     if (Array.isArray(data.marked_cells)) {
@@ -503,5 +561,6 @@ window.addEventListener("DOMContentLoaded", () => {
   if (currentWeek) {
     fetchCardDefinition(currentWeek);
     refreshLeaderboard();
+    refreshStats();
   }
 });
