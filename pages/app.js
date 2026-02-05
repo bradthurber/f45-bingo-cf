@@ -92,6 +92,7 @@ function loadWeek() {
 function saveWeek(week) {
   currentWeek = week;
   localStorage.setItem(LS_WEEK, week);
+  loadMask(); // Load mask for the new week
 }
 
 function renderWeekDisplay() {
@@ -141,13 +142,29 @@ function renderTeamSelector() {
    GRID / MASK
 =========================== */
 
+function getMaskKey() {
+  return currentWeek ? `${LS_MASK}_${currentWeek}` : LS_MASK;
+}
+
 function loadMask() {
-  const saved = localStorage.getItem(LS_MASK);
+  const weekKey = getMaskKey();
+  let saved = localStorage.getItem(weekKey);
+
+  // Migrate old global mask to current week if needed
+  if (!saved && currentWeek) {
+    const oldGlobal = localStorage.getItem(LS_MASK);
+    if (oldGlobal) {
+      saved = oldGlobal;
+      localStorage.setItem(weekKey, oldGlobal);
+      localStorage.removeItem(LS_MASK);
+    }
+  }
+
   markedMask = saved ? BigInt(saved) : 0n;
 }
 
 function persistMask() {
-  localStorage.setItem(LS_MASK, markedMask.toString());
+  localStorage.setItem(getMaskKey(), markedMask.toString());
 }
 
 function clearGridMarks() {
@@ -394,10 +411,7 @@ async function scanImage(file) {
 
     // Handle detected week
     if (data.week && data.week !== currentWeek) {
-      // New week detected - clear old marks and switch
-      if (currentWeek && data.week !== currentWeek) {
-        clearGridMarks();
-      }
+      // New week detected - switch to it (masks are stored per-week)
       saveWeek(data.week);
       renderWeekDisplay();
       await fetchCardDefinition(data.week);
