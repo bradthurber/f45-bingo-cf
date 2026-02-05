@@ -402,9 +402,9 @@ select.input {
 
 /* Challenge Stats */
 .challenge-stats {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
   margin-bottom: 24px;
 }
 

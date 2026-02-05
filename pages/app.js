@@ -413,8 +413,8 @@ async function refreshStats() {
     }
 
     const sorted = [...data.cells].filter(c => c.label).sort((a, b) => b.pct - a.pct);
-    const easiest = sorted.slice(0, 5);
-    const hardest = sorted.slice(-5).reverse();
+    const easiest = sorted.slice(0, 10);
+    const hardest = sorted.slice(-10).reverse();
 
     easiestEl.innerHTML = easiest.map(c => `
       <div class="stat-item">
