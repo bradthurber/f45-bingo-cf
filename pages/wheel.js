@@ -231,12 +231,12 @@ function spin() {
   }
 
   // Pointer is at top (- PI/2), so calculate target rotation
-  // We want the winner segment to be at top
+  // We want the winner segment to be at top (negate because wheel spins counterclockwise visually)
   const targetAngle = -Math.PI / 2 - angleSum;
 
-  // Add multiple full rotations for drama
+  // Add multiple full rotations for drama (negative for counterclockwise spin)
   const spins = 5 + Math.random() * 3;
-  const totalRotation = spins * Math.PI * 2 + targetAngle;
+  const totalRotation = -(spins * Math.PI * 2) + targetAngle;
 
   // Animate
   const duration = 5000;
