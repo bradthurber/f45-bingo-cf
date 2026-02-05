@@ -1,0 +1,259 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: system-ui, -apple-system, sans-serif;
+  margin: 0;
+  background: #fff;
+  color: #1a1a1a;
+  min-height: 100vh;
+  padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+}
+
+.container {
+  max-width: 500px;
+  margin: 0 auto;
+  padding: 24px 16px;
+  text-align: center;
+}
+
+h1 {
+  font-size: 28px;
+  font-weight: 800;
+  margin: 0 0 8px 0;
+}
+
+h3 {
+  font-size: 16px;
+  font-weight: 700;
+  margin: 0 0 12px 0;
+  color: #1a1a1a;
+}
+
+.week-display {
+  font-size: 16px;
+  font-weight: 700;
+  color: #666;
+  margin-bottom: 24px;
+}
+
+.hidden {
+  display: none !important;
+}
+
+/* Auth gate */
+.auth-gate {
+  background: #f5f5f5;
+  border-radius: 12px;
+  padding: 24px;
+  margin-top: 24px;
+}
+
+.auth-gate p {
+  margin: 0 0 16px 0;
+  color: #666;
+}
+
+.input {
+  width: 100%;
+  padding: 14px 16px;
+  font-size: 16px;
+  border-radius: 12px;
+  border: 2px solid #e5e5e5;
+  background: #fff;
+  color: #1a1a1a;
+  margin-bottom: 12px;
+  text-align: center;
+}
+
+.input:focus {
+  outline: none;
+  border-color: #1a1a1a;
+}
+
+.btn {
+  padding: 14px 24px;
+  font-size: 16px;
+  font-weight: 700;
+  border-radius: 12px;
+  border: none;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.btn.primary {
+  background: #1a1a1a;
+  color: #fff;
+}
+
+.btn.primary:active {
+  background: #333;
+}
+
+.btn.primary:disabled {
+  background: #999;
+  cursor: not-allowed;
+}
+
+.btn.secondary {
+  background: #f5f5f5;
+  color: #1a1a1a;
+  border: 2px solid #e5e5e5;
+}
+
+.btn.secondary:active {
+  background: #e5e5e5;
+}
+
+.btn.tertiary {
+  background: transparent;
+  color: #666;
+  font-size: 14px;
+  padding: 10px 16px;
+}
+
+.error {
+  color: #dc2626;
+  font-size: 14px;
+  margin-top: 12px;
+}
+
+/* Wheel section */
+.wheel-section {
+  margin-top: 24px;
+}
+
+.wheel-container {
+  position: relative;
+  display: inline-block;
+  margin-bottom: 24px;
+}
+
+#wheelCanvas {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+.pointer {
+  position: absolute;
+  top: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 15px solid transparent;
+  border-right: 15px solid transparent;
+  border-top: 30px solid #1a1a1a;
+  z-index: 10;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+}
+
+.controls {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.spin-btn {
+  font-size: 20px;
+  padding: 18px 32px;
+}
+
+/* Winner display */
+.winner {
+  background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+  border: 3px solid #f59e0b;
+  border-radius: 16px;
+  padding: 24px;
+  margin-bottom: 24px;
+  animation: winner-pop 0.5s ease-out;
+}
+
+@keyframes winner-pop {
+  0% { transform: scale(0.8); opacity: 0; }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.winner-label {
+  font-size: 14px;
+  font-weight: 700;
+  color: #92400e;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 8px;
+}
+
+.winner-name {
+  font-size: 32px;
+  font-weight: 900;
+  color: #1a1a1a;
+  margin-bottom: 4px;
+}
+
+.winner-tickets {
+  font-size: 16px;
+  color: #666;
+}
+
+/* Participants list */
+.participants {
+  background: #f5f5f5;
+  border-radius: 12px;
+  padding: 16px;
+  text-align: left;
+  margin-bottom: 24px;
+}
+
+.participant-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.participant-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 12px;
+  background: #fff;
+  border-radius: 8px;
+  font-size: 14px;
+}
+
+.participant-name {
+  font-weight: 600;
+}
+
+.participant-info {
+  color: #666;
+  font-size: 13px;
+}
+
+/* Removed winners */
+.removed-section {
+  background: #fef2f2;
+  border-radius: 12px;
+  padding: 16px;
+  text-align: left;
+}
+
+.removed-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 12px;
+}
+
+.removed-item {
+  font-size: 14px;
+  color: #666;
+  padding: 8px 12px;
+  background: #fff;
+  border-radius: 6px;
+}
