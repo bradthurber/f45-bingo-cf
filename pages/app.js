@@ -86,6 +86,7 @@ function loadWeek() {
   } else {
     // Default to current challenge week if nothing saved
     currentWeek = getCurrentChallengeWeek();
+    localStorage.setItem(LS_WEEK, currentWeek);
   }
 }
 
