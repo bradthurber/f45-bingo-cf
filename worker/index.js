@@ -79,42 +79,6 @@ function json(obj, status = 200) {
   });
 }
 
-// Indiana-only gate.
-// NOTE: in local dev, Cloudflare geo fields are often empty.
-// Set ALLOW_ALL_GEO=true in .dev.vars to bypass in dev only.
-function enforceIndianaOnly(request, env) {
-  // Dev bypass if you ever enable it later
-  if (env && env.ALLOW_ALL_GEO === "true") return null;
-
-  const cf = request.cf || {};
-  const country = String(cf.country || "").toUpperCase();
-  const regionCode = String(cf.regionCode || "").toUpperCase();
-  const region = String(cf.region || "");
-
-  const isIndiana =
-    (country === "US" && regionCode === "IN") ||
-    (country === "US" && region.toLowerCase() === "indiana");
-
-  if (!isIndiana) {
-    return json(
-      {
-        error: "geo_blocked",
-        message: "This tool is only available to Indiana users.",
-        // TEMP DEBUG: remove once confirmed
-        debug: {
-          country: cf.country || null,
-          region: cf.region || null,
-          regionCode: cf.regionCode || null,
-          colo: cf.colo || null
-        }
-      },
-      403
-    );
-  }
-
-  return null;
-}
-
 async function handleLeaderboard(env, url) {
   const week = (url.searchParams.get("week") || "").trim();
   if (!week) return json({ error: "missing_week" }, 400);
@@ -130,9 +94,6 @@ async function handleLeaderboard(env, url) {
 }
 
 async function handleSubmit(request, env) {
-  const geoBlock = enforceIndianaOnly(request, env);
-  if (geoBlock) return geoBlock;
-
   const deviceId = request.headers.get("x-device-id") || "";
   if (!deviceId) return json({ error: "missing_device_id" }, 400);
 
@@ -194,9 +155,6 @@ async function handleSubmit(request, env) {
 }
 
 async function handleScan(request, env) {
-  const geoBlock = enforceIndianaOnly(request, env);
-  if (geoBlock) return geoBlock;
-
   if (env.SCANNING_ENABLED === "false") return json({ error: "scanning_disabled" }, 503);
   if (!env.OPENAI_API_KEY) return json({ error: "missing_openai_key" }, 500);
 
