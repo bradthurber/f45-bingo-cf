@@ -446,9 +446,45 @@ select.input {
   white-space: nowrap;
 }
 
+/* Sticky submit */
+.sticky-submit {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 12px 16px;
+  padding-bottom: calc(12px + env(safe-area-inset-bottom));
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-top: 1px solid #e5e5e5;
+  z-index: 100;
+}
+
+.sticky-submit.hidden {
+  display: none;
+}
+
+.submit-btn.sticky {
+  max-width: 500px;
+  margin: 0 auto;
+  display: block;
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+@keyframes pulse-glow {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(26, 26, 26, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 0 8px rgba(26, 26, 26, 0);
+  }
+}
+
 .delete-section {
   margin-top: 32px;
   padding-top: 24px;
+  padding-bottom: 80px; /* Space for sticky button */
   border-top: 1px solid #e5e5e5;
   text-align: center;
 }

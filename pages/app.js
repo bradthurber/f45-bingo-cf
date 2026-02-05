@@ -273,6 +273,17 @@ function countTickets() {
 
 function renderTickets() {
   qs("ticketCount").textContent = countTickets();
+  updateStickyButton();
+}
+
+function updateStickyButton() {
+  const stickySubmit = qs("stickySubmit");
+  // Show sticky button if there are marked cells
+  if (markedMask > 0n) {
+    stickySubmit.classList.remove("hidden");
+  } else {
+    stickySubmit.classList.add("hidden");
+  }
 }
 
 /* ===========================
@@ -538,6 +549,7 @@ window.addEventListener("DOMContentLoaded", () => {
   });
 
   qs("submitBtn").addEventListener("click", submitBoard);
+  qs("stickySubmitBtn").addEventListener("click", submitBoard);
 
   qs("scanInput").addEventListener("change", e => {
     if (e.target.files[0]) scanImage(e.target.files[0]);
