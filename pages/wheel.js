@@ -27,6 +27,7 @@ const participantList = document.getElementById("participantList");
 const removedSection = document.getElementById("removedSection");
 const removedList = document.getElementById("removedList");
 const resetBtn = document.getElementById("resetBtn");
+const refreshBtn = document.getElementById("refreshBtn");
 
 // Colors for wheel segments
 const COLORS = [
@@ -48,6 +49,7 @@ document.addEventListener("DOMContentLoaded", () => {
   spinBtn.addEventListener("click", spin);
   removeBtn.addEventListener("click", removeWinnerAndRespin);
   resetBtn.addEventListener("click", resetAll);
+  refreshBtn.addEventListener("click", loadParticipants);
 });
 
 async function authenticate() {
@@ -88,7 +90,9 @@ async function authenticate() {
 
 async function loadParticipants() {
   try {
-    const res = await fetch(`${API_BASE}/api/leaderboard?week=${encodeURIComponent(currentWeek)}`);
+    const res = await fetch(`${API_BASE}/api/leaderboard?week=${encodeURIComponent(currentWeek)}`, {
+      cache: "no-store"
+    });
     const data = await res.json();
 
     // Filter out removed winners and those with 0 tickets
