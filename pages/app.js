@@ -548,7 +548,6 @@ window.addEventListener("DOMContentLoaded", () => {
     cell.addEventListener("click", () => toggleCell(idx));
   });
 
-  qs("submitBtn").addEventListener("click", submitBoard);
   qs("stickySubmitBtn").addEventListener("click", submitBoard);
 
   qs("scanInput").addEventListener("change", e => {
