@@ -234,7 +234,7 @@ function spin() {
   // We want: R + angleToWinnerCenter ≡ -PI/2 (mod 2*PI)
   // But wheel spins multiple times, landing at that spot.
   const spins = 5 + Math.random() * 3;
-  const targetStop = (Math.PI * 3 / 2) - angleToWinnerCenter; // equivalent to -PI/2 - angleToWinnerCenter
+  const targetStop = (Math.PI * 3 / 2) + angleToWinnerCenter;
   const totalRotation = spins * Math.PI * 2 + targetStop;
 
   // Animate
