@@ -219,24 +219,23 @@ function spin() {
   const winner = pickWeightedRandom();
   currentWinner = winner;
 
-  // Calculate where winner's segment is and where to land
-  let angleSum = 0;
-  for (const p of participants) {
-    if (p.display_name === winner.display_name) {
-      // Land in middle of this segment
-      angleSum += (p.tickets_total / totalTickets) * Math.PI * 2 / 2;
-      break;
-    }
-    angleSum += (p.tickets_total / totalTickets) * Math.PI * 2;
+  // Find winner's index and calculate angle to their segment center
+  const winnerIndex = participants.indexOf(winner);
+  let angleToWinnerCenter = 0;
+  for (let i = 0; i < winnerIndex; i++) {
+    angleToWinnerCenter += (participants[i].tickets_total / totalTickets) * Math.PI * 2;
   }
+  angleToWinnerCenter += (winner.tickets_total / totalTickets) * Math.PI * 2 / 2;
 
-  // Pointer is at top (- PI/2), so calculate target rotation
-  // We want the winner segment to be at top (negate because wheel spins counterclockwise visually)
-  const targetAngle = -Math.PI / 2 - angleSum;
-
-  // Add multiple full rotations for drama (negative for counterclockwise spin)
+  // Pointer is at top. To land winner there, we need to rotate so winner center ends at top.
+  // At rotation=0, winner center is at angleToWinnerCenter (measured clockwise from right).
+  // Top is at -PI/2 (or 3*PI/2). We need to spin so that winner moves to top.
+  // Final rotation R means first segment starts at R, so winner center is at R + angleToWinnerCenter.
+  // We want: R + angleToWinnerCenter ≡ -PI/2 (mod 2*PI)
+  // But wheel spins multiple times, landing at that spot.
   const spins = 5 + Math.random() * 3;
-  const totalRotation = -(spins * Math.PI * 2) + targetAngle;
+  const targetStop = (Math.PI * 3 / 2) - angleToWinnerCenter; // equivalent to -PI/2 - angleToWinnerCenter
+  const totalRotation = spins * Math.PI * 2 + targetStop;
 
   // Animate
   const duration = 5000;
