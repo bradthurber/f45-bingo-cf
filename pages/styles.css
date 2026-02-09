@@ -260,7 +260,10 @@ select.input {
   text-transform: uppercase;
   letter-spacing: 1.5px;
   color: #78716c;
-  margin-bottom: 6px;
+}
+
+.ticket-breakdown:not(:empty) {
+  margin-top: 6px;
 }
 
 .ticket-breakdown {
@@ -273,7 +276,7 @@ select.input {
 }
 
 .ticket-stub {
-  padding: 14px 26px 14px 14px;
+  padding: 14px 20px;
   border-left: 2px dashed rgba(0, 0, 0, 0.15);
   display: flex;
   align-items: center;
