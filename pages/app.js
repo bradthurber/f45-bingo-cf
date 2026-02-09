@@ -296,7 +296,30 @@ function renderTickets() {
   const el = qs("ticketCount");
   const prev = parseInt(el.textContent, 10) || 0;
   el.textContent = total;
-  el.style.color = currentTeam === "red" ? "#dc2626" : currentTeam === "blue" ? "#2563eb" : "#1a1a1a";
+
+  // Theme the ticket section to match team color
+  const wrap = qs("ticketSection");
+  const label = qs("ticketsLabel");
+  const breakdown = qs("ticketBreakdown");
+  if (currentTeam === "red") {
+    el.style.color = "#dc2626";
+    label.style.color = "#dc2626";
+    breakdown.style.color = "#b91c1c";
+    wrap.style.borderColor = "rgba(220, 38, 38, 0.4)";
+    wrap.style.background = "rgba(254, 226, 226, 0.5)";
+  } else if (currentTeam === "blue") {
+    el.style.color = "#2563eb";
+    label.style.color = "#2563eb";
+    breakdown.style.color = "#1d4ed8";
+    wrap.style.borderColor = "rgba(37, 99, 235, 0.4)";
+    wrap.style.background = "rgba(219, 234, 254, 0.5)";
+  } else {
+    el.style.color = "#1a1a1a";
+    label.style.color = "#1a1a1a";
+    breakdown.style.color = "#666";
+    wrap.style.borderColor = "#e5e5e5";
+    wrap.style.background = "#f5f5f5";
+  }
 
   if (total !== prev) {
     el.classList.remove("bump");
@@ -308,7 +331,7 @@ function renderTickets() {
   if (markedCount > 0) parts.push(`${markedCount} square${markedCount !== 1 ? "s" : ""}`);
   if (bingoCount > 0) parts.push(`${bingoCount} bingo${bingoCount !== 1 ? "s" : ""} (+${bingoCount * 3})`);
   if (fullCard) parts.push("full card bonus (+5)");
-  qs("ticketBreakdown").textContent = parts.join(" \u00b7 ");
+  breakdown.textContent = parts.join(" \u00b7 ");
 
   updateStickyButton();
 }
