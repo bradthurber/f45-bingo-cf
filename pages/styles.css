@@ -206,18 +206,35 @@ select.input {
   margin: 20px 0;
   border: 2px solid #c4b99a;
   border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  box-shadow:
+    0 2px 8px rgba(0, 0, 0, 0.06),
+    inset 0 0 0 3px rgba(196, 185, 154, 0.15),
+    inset 0 0 0 5px rgba(196, 185, 154, 0.08);
   background:
-    repeating-linear-gradient(
-      45deg, transparent, transparent 8px,
-      rgba(0, 0, 0, 0.018) 8px, rgba(0, 0, 0, 0.018) 9px),
-    repeating-linear-gradient(
-      -45deg, transparent, transparent 8px,
-      rgba(0, 0, 0, 0.018) 8px, rgba(0, 0, 0, 0.018) 9px),
-    radial-gradient(circle 80px at 15% 50%, rgba(0, 0, 0, 0.035) 0%, transparent 100%),
-    radial-gradient(circle 80px at 85% 50%, rgba(0, 0, 0, 0.035) 0%, transparent 100%),
-    radial-gradient(circle 40px at 50% 50%, rgba(0, 0, 0, 0.025) 0%, transparent 100%),
-    linear-gradient(to right, #f5f0e6, #faf7f0, #f5f0e6);
+    /* Primary crosshatch */
+    repeating-linear-gradient(45deg, transparent, transparent 4px,
+      rgba(0, 0, 0, 0.03) 4px, rgba(0, 0, 0, 0.03) 5px),
+    repeating-linear-gradient(-45deg, transparent, transparent 4px,
+      rgba(0, 0, 0, 0.03) 4px, rgba(0, 0, 0, 0.03) 5px),
+    /* Secondary crosshatch at offset angle */
+    repeating-linear-gradient(30deg, transparent, transparent 10px,
+      rgba(0, 0, 0, 0.015) 10px, rgba(0, 0, 0, 0.015) 11px),
+    repeating-linear-gradient(-30deg, transparent, transparent 10px,
+      rgba(0, 0, 0, 0.015) 10px, rgba(0, 0, 0, 0.015) 11px),
+    /* Fine horizontal lines */
+    repeating-linear-gradient(0deg, transparent, transparent 2px,
+      rgba(0, 0, 0, 0.01) 2px, rgba(0, 0, 0, 0.01) 3px),
+    /* Rosettes */
+    radial-gradient(circle 55px at 18% 50%, rgba(0, 0, 0, 0.05) 0%, transparent 70%),
+    radial-gradient(circle 55px at 82% 50%, rgba(0, 0, 0, 0.05) 0%, transparent 70%),
+    radial-gradient(circle 35px at 50% 50%, rgba(0, 0, 0, 0.04) 0%, transparent 60%),
+    /* Concentric rings */
+    radial-gradient(circle at 18% 50%, transparent 30px, rgba(0,0,0,0.025) 31px, transparent 33px),
+    radial-gradient(circle at 18% 50%, transparent 42px, rgba(0,0,0,0.02) 43px, transparent 45px),
+    radial-gradient(circle at 82% 50%, transparent 30px, rgba(0,0,0,0.025) 31px, transparent 33px),
+    radial-gradient(circle at 82% 50%, transparent 42px, rgba(0,0,0,0.02) 43px, transparent 45px),
+    /* Base */
+    linear-gradient(to right, #f3ede0, #faf7f0, #f3ede0);
 }
 
 /* Circular notch cutouts */
@@ -305,16 +322,34 @@ select.input {
 /* Red team ticket */
 .ticket.team-red {
   border-color: rgba(220, 38, 38, 0.4);
+  box-shadow:
+    0 2px 8px rgba(220, 38, 38, 0.08),
+    inset 0 0 0 3px rgba(220, 38, 38, 0.08),
+    inset 0 0 0 5px rgba(220, 38, 38, 0.04);
   background:
-    repeating-linear-gradient(
-      45deg, transparent, transparent 8px,
-      rgba(220, 38, 38, 0.04) 8px, rgba(220, 38, 38, 0.04) 9px),
-    repeating-linear-gradient(
-      -45deg, transparent, transparent 8px,
-      rgba(220, 38, 38, 0.04) 8px, rgba(220, 38, 38, 0.04) 9px),
-    radial-gradient(circle 80px at 15% 50%, rgba(220, 38, 38, 0.06) 0%, transparent 100%),
-    radial-gradient(circle 80px at 85% 50%, rgba(220, 38, 38, 0.06) 0%, transparent 100%),
-    radial-gradient(circle 40px at 50% 50%, rgba(220, 38, 38, 0.04) 0%, transparent 100%),
+    /* Primary crosshatch */
+    repeating-linear-gradient(45deg, transparent, transparent 4px,
+      rgba(220, 38, 38, 0.04) 4px, rgba(220, 38, 38, 0.04) 5px),
+    repeating-linear-gradient(-45deg, transparent, transparent 4px,
+      rgba(220, 38, 38, 0.04) 4px, rgba(220, 38, 38, 0.04) 5px),
+    /* Secondary crosshatch at offset angle */
+    repeating-linear-gradient(30deg, transparent, transparent 10px,
+      rgba(220, 38, 38, 0.02) 10px, rgba(220, 38, 38, 0.02) 11px),
+    repeating-linear-gradient(-30deg, transparent, transparent 10px,
+      rgba(220, 38, 38, 0.02) 10px, rgba(220, 38, 38, 0.02) 11px),
+    /* Fine horizontal lines */
+    repeating-linear-gradient(0deg, transparent, transparent 2px,
+      rgba(220, 38, 38, 0.012) 2px, rgba(220, 38, 38, 0.012) 3px),
+    /* Rosettes */
+    radial-gradient(circle 55px at 18% 50%, rgba(220, 38, 38, 0.06) 0%, transparent 70%),
+    radial-gradient(circle 55px at 82% 50%, rgba(220, 38, 38, 0.06) 0%, transparent 70%),
+    radial-gradient(circle 35px at 50% 50%, rgba(220, 38, 38, 0.05) 0%, transparent 60%),
+    /* Concentric rings */
+    radial-gradient(circle at 18% 50%, transparent 30px, rgba(220,38,38,0.03) 31px, transparent 33px),
+    radial-gradient(circle at 18% 50%, transparent 42px, rgba(220,38,38,0.025) 43px, transparent 45px),
+    radial-gradient(circle at 82% 50%, transparent 30px, rgba(220,38,38,0.03) 31px, transparent 33px),
+    radial-gradient(circle at 82% 50%, transparent 42px, rgba(220,38,38,0.025) 43px, transparent 45px),
+    /* Base */
     linear-gradient(to right, #fef2f2, #fff7f7, #fef2f2);
 }
 
@@ -328,16 +363,34 @@ select.input {
 /* Blue team ticket */
 .ticket.team-blue {
   border-color: rgba(37, 99, 235, 0.4);
+  box-shadow:
+    0 2px 8px rgba(37, 99, 235, 0.08),
+    inset 0 0 0 3px rgba(37, 99, 235, 0.08),
+    inset 0 0 0 5px rgba(37, 99, 235, 0.04);
   background:
-    repeating-linear-gradient(
-      45deg, transparent, transparent 8px,
-      rgba(37, 99, 235, 0.04) 8px, rgba(37, 99, 235, 0.04) 9px),
-    repeating-linear-gradient(
-      -45deg, transparent, transparent 8px,
-      rgba(37, 99, 235, 0.04) 8px, rgba(37, 99, 235, 0.04) 9px),
-    radial-gradient(circle 80px at 15% 50%, rgba(37, 99, 235, 0.06) 0%, transparent 100%),
-    radial-gradient(circle 80px at 85% 50%, rgba(37, 99, 235, 0.06) 0%, transparent 100%),
-    radial-gradient(circle 40px at 50% 50%, rgba(37, 99, 235, 0.04) 0%, transparent 100%),
+    /* Primary crosshatch */
+    repeating-linear-gradient(45deg, transparent, transparent 4px,
+      rgba(37, 99, 235, 0.04) 4px, rgba(37, 99, 235, 0.04) 5px),
+    repeating-linear-gradient(-45deg, transparent, transparent 4px,
+      rgba(37, 99, 235, 0.04) 4px, rgba(37, 99, 235, 0.04) 5px),
+    /* Secondary crosshatch at offset angle */
+    repeating-linear-gradient(30deg, transparent, transparent 10px,
+      rgba(37, 99, 235, 0.02) 10px, rgba(37, 99, 235, 0.02) 11px),
+    repeating-linear-gradient(-30deg, transparent, transparent 10px,
+      rgba(37, 99, 235, 0.02) 10px, rgba(37, 99, 235, 0.02) 11px),
+    /* Fine horizontal lines */
+    repeating-linear-gradient(0deg, transparent, transparent 2px,
+      rgba(37, 99, 235, 0.012) 2px, rgba(37, 99, 235, 0.012) 3px),
+    /* Rosettes */
+    radial-gradient(circle 55px at 18% 50%, rgba(37, 99, 235, 0.06) 0%, transparent 70%),
+    radial-gradient(circle 55px at 82% 50%, rgba(37, 99, 235, 0.06) 0%, transparent 70%),
+    radial-gradient(circle 35px at 50% 50%, rgba(37, 99, 235, 0.05) 0%, transparent 60%),
+    /* Concentric rings */
+    radial-gradient(circle at 18% 50%, transparent 30px, rgba(37,99,235,0.03) 31px, transparent 33px),
+    radial-gradient(circle at 18% 50%, transparent 42px, rgba(37,99,235,0.025) 43px, transparent 45px),
+    radial-gradient(circle at 82% 50%, transparent 30px, rgba(37,99,235,0.03) 31px, transparent 33px),
+    radial-gradient(circle at 82% 50%, transparent 42px, rgba(37,99,235,0.025) 43px, transparent 45px),
+    /* Base */
     linear-gradient(to right, #eff6ff, #f5f9ff, #eff6ff);
 }
 
