@@ -681,3 +681,10 @@ select.input {
   border-color: #dc2626;
   color: #dc2626;
 }
+
+.build-tag {
+  text-align: center;
+  font-size: 10px;
+  color: #ccc;
+  margin-top: 12px;
+}
