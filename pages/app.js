@@ -79,30 +79,49 @@ function getCurrentChallengeWeek() {
   return "week6";
 }
 
-function loadWeek() {
-  const saved = localStorage.getItem(LS_WEEK);
-  if (saved) {
-    currentWeek = saved;
-  } else {
-    // Default to current challenge week if nothing saved
-    currentWeek = getCurrentChallengeWeek();
-    localStorage.setItem(LS_WEEK, currentWeek);
+function getAvailableWeeks() {
+  const current = getCurrentChallengeWeek();
+  const match = current.match(/week(\d+)/);
+  const num = match ? parseInt(match[1], 10) : 1;
+  const weeks = [];
+  for (let i = 1; i <= num; i++) {
+    weeks.push(`week${i}`);
   }
+  return weeks;
+}
+
+function loadWeek() {
+  currentWeek = getCurrentChallengeWeek();
 }
 
 function saveWeek(week) {
   currentWeek = week;
-  localStorage.setItem(LS_WEEK, week);
-  loadMask(); // Load mask for the new week
+  loadMask();
 }
 
-function renderWeekDisplay() {
-  const display = qs("weekDisplay");
-  if (currentWeek) {
-    display.textContent = formatWeek(currentWeek);
-  } else {
-    display.textContent = "";
+function renderWeekPicker() {
+  const picker = qs("weekPicker");
+  const weeks = getAvailableWeeks();
+  picker.innerHTML = "";
+  for (const week of weeks) {
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "week-tab" + (week === currentWeek ? " active" : "");
+    btn.textContent = formatWeek(week);
+    btn.addEventListener("click", () => switchWeek(week));
+    picker.appendChild(btn);
   }
+}
+
+async function switchWeek(week) {
+  if (week === currentWeek) return;
+  saveWeek(week);
+  renderWeekPicker();
+  renderGrid();
+  renderTickets();
+  await fetchCardDefinition(week);
+  await refreshLeaderboard();
+  await refreshStats();
 }
 
 /* ===========================
@@ -482,7 +501,7 @@ async function scanImage(file) {
     if (data.week && data.week !== currentWeek) {
       // New week detected - switch to it (masks are stored per-week)
       saveWeek(data.week);
-      renderWeekDisplay();
+      renderWeekPicker();
       await fetchCardDefinition(data.week);
       await refreshLeaderboard();
       await refreshStats();
@@ -541,7 +560,7 @@ window.addEventListener("DOMContentLoaded", () => {
   loadMask();
   loadTeam();
 
-  renderWeekDisplay();
+  renderWeekPicker();
   renderTeamSelector();
 
   document.querySelectorAll(".cell").forEach((cell, idx) => {

@@ -38,9 +38,34 @@ h2 {
   color: #1a1a1a;
 }
 
-.week-display {
-  font-weight: 800;
-  color: #1a1a1a;
+/* Week picker */
+.week-picker {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.week-tab {
+  padding: 8px 16px;
+  border-radius: 20px;
+  border: 2px solid #e5e5e5;
+  background: #f5f5f5;
+  color: #666;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.week-tab.active {
+  background: #1a1a1a;
+  border-color: #1a1a1a;
+  color: #fff;
+}
+
+.week-tab:active {
+  opacity: 0.8;
 }
 
 .instructions {
