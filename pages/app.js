@@ -319,7 +319,7 @@ function renderTickets() {
   if (markedCount > 0) parts.push(`${markedCount} square${markedCount !== 1 ? "s" : ""}`);
   if (bingoCount > 0) parts.push(`${bingoCount} bingo${bingoCount !== 1 ? "s" : ""} (+${bingoCount * 3})`);
   if (fullCard) parts.push("full card bonus (+5)");
-  breakdown.textContent = parts.join(" \u00b7 ");
+  qs("ticketBreakdown").textContent = parts.join(" \u00b7 ");
 
   updateStickyButton();
 }
