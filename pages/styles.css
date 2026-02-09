@@ -288,7 +288,7 @@ select.input {
   font-family: 'Playfair Display', Georgia, serif;
   font-size: 56px;
   font-weight: 900;
-  line-height: 1;
+  line-height: 0.75;
   color: #1a1a1a;
 }
 
