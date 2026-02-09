@@ -254,8 +254,9 @@ select.input {
 }
 
 .ticket-label {
-  font-size: 13px;
-  font-weight: 800;
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 15px;
+  font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 1.5px;
   color: #78716c;
@@ -263,9 +264,11 @@ select.input {
 }
 
 .ticket-breakdown {
+  font-family: 'Playfair Display', Georgia, serif;
   font-size: 12px;
   color: #78716c;
-  font-weight: 500;
+  font-weight: 700;
+  font-style: italic;
   line-height: 1.4;
 }
 
@@ -279,6 +282,7 @@ select.input {
 }
 
 .ticket-number {
+  font-family: 'Playfair Display', Georgia, serif;
   font-size: 56px;
   font-weight: 900;
   line-height: 1;
