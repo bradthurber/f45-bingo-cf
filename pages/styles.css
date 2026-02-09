@@ -221,10 +221,7 @@ select.input {
   font-size: 64px;
   font-weight: 900;
   line-height: 1.1;
-  background: linear-gradient(135deg, #f59e0b, #ef4444, #a855f7);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: #1a1a1a;
 }
 
 .ticket-number.bump {

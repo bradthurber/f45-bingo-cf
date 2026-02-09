@@ -296,6 +296,7 @@ function renderTickets() {
   const el = qs("ticketCount");
   const prev = parseInt(el.textContent, 10) || 0;
   el.textContent = total;
+  el.style.color = currentTeam === "red" ? "#dc2626" : currentTeam === "blue" ? "#2563eb" : "#1a1a1a";
 
   if (total !== prev) {
     el.classList.remove("bump");
@@ -673,11 +674,13 @@ window.addEventListener("DOMContentLoaded", () => {
   qs("teamRed").addEventListener("click", () => {
     saveTeam("red");
     renderTeamSelector();
+    renderTickets();
   });
 
   qs("teamBlue").addEventListener("click", () => {
     saveTeam("blue");
     renderTeamSelector();
+    renderTickets();
   });
 
   renderGrid();
