@@ -2,7 +2,7 @@ const API_BASE = "https://f45-bingo.f45-bingo.workers.dev";
 const POLL_MS = 10000;
 const TOP_N = 10;
 
-const elWeek = document.getElementById("weekId");
+const elPicker = document.getElementById("weekPicker");
 const elLast = document.getElementById("lastUpdated");
 const elRows = document.getElementById("rows");
 const elTicker = document.getElementById("ticker");
@@ -11,7 +11,7 @@ const elJoin = document.getElementById("joinUrl");
 const elEasiest = document.getElementById("easiest");
 const elHardest = document.getElementById("hardest");
 
-let weekId = getWeekFromUrl() || getCurrentChallengeWeek();
+let weekId = getWeekFromUrl() || getRaffleDefaultWeek();
 let lastSnapshot = new Map();
 let lastLeader = null;
 let lastTickMsg = "Waiting for updates...";
@@ -19,8 +19,53 @@ let lastPositions = new Map(); // Track previous positions
 
 init();
 
+function getRaffleDefaultWeek() {
+  const current = getCurrentChallengeWeek();
+  const match = current.match(/week(\d+)/);
+  const num = match ? parseInt(match[1], 10) : 1;
+  // Default to previous week for raffle, but stay on week1 if that's current
+  // and cap at week6 (last week of challenge)
+  if (num <= 1) return "week1";
+  return `week${num - 1}`;
+}
+
+function getAvailableWeeks() {
+  const current = getCurrentChallengeWeek();
+  const match = current.match(/week(\d+)/);
+  const num = match ? parseInt(match[1], 10) : 1;
+  const weeks = [];
+  for (let i = 1; i <= num; i++) {
+    weeks.push(`week${i}`);
+  }
+  return weeks;
+}
+
+function renderWeekPicker() {
+  const weeks = getAvailableWeeks();
+  elPicker.innerHTML = "";
+  for (const week of weeks) {
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "tv-week-tab" + (week === weekId ? " active" : "");
+    btn.textContent = "Week " + week.match(/\d+/)[0];
+    btn.addEventListener("click", () => switchWeek(week));
+    elPicker.appendChild(btn);
+  }
+}
+
+function switchWeek(week) {
+  if (week === weekId) return;
+  weekId = week;
+  lastSnapshot = new Map();
+  lastLeader = null;
+  lastPositions = new Map();
+  lastTickMsg = "Waiting for updates...";
+  renderWeekPicker();
+  pollOnce();
+}
+
 function init() {
-  elWeek.textContent = formatWeekDisplay(weekId);
+  renderWeekPicker();
 
   const joinUrl = computeJoinUrl();
   elJoin.textContent = joinUrl;

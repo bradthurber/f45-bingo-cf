@@ -32,6 +32,34 @@ html, body {
 .sub { font-size: 16px; color: var(--muted); margin-top: 8px; }
 .dot { margin: 0 10px; color: var(--muted2); }
 
+.tv-week-picker {
+  display: inline-flex;
+  gap: 6px;
+  vertical-align: middle;
+}
+
+.tv-week-tab {
+  padding: 6px 14px;
+  border-radius: 16px;
+  border: 2px solid var(--border);
+  background: var(--panel);
+  color: var(--muted);
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.tv-week-tab.active {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+}
+
+.tv-week-tab:hover:not(.active) {
+  border-color: var(--muted);
+}
+
 .bottom {
   margin-top: auto;
 }
