@@ -200,23 +200,70 @@ select.input {
 
 /* Tickets */
 .tickets {
-  background: #f5f5f5;
-  border-radius: 12px;
-  padding: 16px;
+  background: linear-gradient(135deg, #fdf2f8 0%, #fef3c7 50%, #ecfdf5 100%);
+  border-radius: 16px;
+  padding: 20px 16px;
   text-align: center;
   margin: 20px 0;
+  border: 2px solid #f5d0fe;
 }
 
 .tickets-label {
-  font-size: 14px;
-  color: #666;
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #a855f7;
   margin-bottom: 4px;
 }
 
-#ticketCount {
-  font-size: 48px;
-  font-weight: 800;
-  color: #1a1a1a;
+.ticket-number {
+  font-size: 64px;
+  font-weight: 900;
+  line-height: 1.1;
+  background: linear-gradient(135deg, #f59e0b, #ef4444, #a855f7);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.ticket-number.bump {
+  animation: ticket-bump 0.4s ease;
+}
+
+@keyframes ticket-bump {
+  0% { transform: scale(1); }
+  40% { transform: scale(1.15); }
+  100% { transform: scale(1); }
+}
+
+.ticket-breakdown {
+  font-size: 13px;
+  color: #666;
+  margin-top: 6px;
+  font-weight: 500;
+}
+
+/* Submit celebration toast */
+.submit-toast {
+  position: fixed;
+  top: -60px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: linear-gradient(135deg, #10b981, #059669);
+  color: #fff;
+  padding: 14px 28px;
+  border-radius: 50px;
+  font-size: 16px;
+  font-weight: 700;
+  z-index: 10000;
+  transition: top 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  white-space: nowrap;
+  box-shadow: 0 4px 20px rgba(16, 185, 129, 0.4);
+}
+
+.submit-toast.visible {
+  top: 40px;
 }
 
 /* Team selector */

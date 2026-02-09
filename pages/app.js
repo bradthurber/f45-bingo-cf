@@ -287,11 +287,28 @@ function countTickets() {
   if (diag2) bingoCount++;
 
   const fullCard = markedCount === 25;
-  return markedCount + (bingoCount * 3) + (fullCard ? 5 : 0);
+  const total = markedCount + (bingoCount * 3) + (fullCard ? 5 : 0);
+  return { markedCount, bingoCount, fullCard, total };
 }
 
 function renderTickets() {
-  qs("ticketCount").textContent = countTickets();
+  const { markedCount, bingoCount, fullCard, total } = countTickets();
+  const el = qs("ticketCount");
+  const prev = parseInt(el.textContent, 10) || 0;
+  el.textContent = total;
+
+  if (total !== prev) {
+    el.classList.remove("bump");
+    void el.offsetWidth;
+    el.classList.add("bump");
+  }
+
+  const parts = [];
+  if (markedCount > 0) parts.push(`${markedCount} square${markedCount !== 1 ? "s" : ""}`);
+  if (bingoCount > 0) parts.push(`${bingoCount} bingo${bingoCount !== 1 ? "s" : ""} (+${bingoCount * 3})`);
+  if (fullCard) parts.push("full card bonus (+5)");
+  qs("ticketBreakdown").textContent = parts.join(" \u00b7 ");
+
   updateStickyButton();
 }
 
@@ -303,6 +320,83 @@ function updateStickyButton() {
   } else {
     stickySubmit.classList.add("hidden");
   }
+}
+
+/* ===========================
+   CELEBRATION
+=========================== */
+
+function fireConfetti() {
+  const canvas = document.createElement("canvas");
+  canvas.style.cssText = "position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:9999";
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+  document.body.appendChild(canvas);
+  const ctx = canvas.getContext("2d");
+
+  const colors = ["#dc2626", "#2563eb", "#f59e0b", "#10b981", "#8b5cf6", "#ec4899"];
+  const particles = [];
+
+  for (let i = 0; i < 150; i++) {
+    particles.push({
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height * -0.5,
+      vx: (Math.random() - 0.5) * 4,
+      vy: Math.random() * 3 + 2,
+      color: colors[Math.floor(Math.random() * colors.length)],
+      size: Math.random() * 8 + 4,
+      rotation: Math.random() * 360,
+      rSpeed: (Math.random() - 0.5) * 10,
+      wobble: Math.random() * Math.PI * 2,
+      wSpeed: Math.random() * 0.1 + 0.05
+    });
+  }
+
+  let frame = 0;
+  function animate() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    let alive = false;
+
+    for (const p of particles) {
+      p.wobble += p.wSpeed;
+      p.x += p.vx + Math.sin(p.wobble) * 2;
+      p.y += p.vy;
+      p.rotation += p.rSpeed;
+
+      if (p.y > canvas.height + 20) continue;
+      alive = true;
+
+      ctx.save();
+      ctx.translate(p.x, p.y);
+      ctx.rotate((p.rotation * Math.PI) / 180);
+      ctx.fillStyle = p.color;
+      ctx.fillRect(-p.size / 2, -p.size / 4, p.size, p.size / 2);
+      ctx.restore();
+    }
+
+    frame++;
+    if (alive && frame < 300) {
+      requestAnimationFrame(animate);
+    } else {
+      canvas.remove();
+    }
+  }
+
+  requestAnimationFrame(animate);
+}
+
+function showCelebration() {
+  fireConfetti();
+  const toast = document.createElement("div");
+  toast.className = "submit-toast";
+  const { total } = countTickets();
+  toast.textContent = `Submitted! ${total} tickets earned!`;
+  document.body.appendChild(toast);
+  setTimeout(() => toast.classList.add("visible"), 10);
+  setTimeout(() => {
+    toast.classList.remove("visible");
+    setTimeout(() => toast.remove(), 400);
+  }, 2500);
 }
 
 /* ===========================
@@ -346,6 +440,7 @@ async function submitBoard() {
     });
 
     await corsJson(res);
+    showCelebration();
     await refreshLeaderboard();
     await refreshStats();
   } catch (err) {
