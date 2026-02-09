@@ -203,7 +203,8 @@ select.input {
   position: relative;
   display: flex;
   align-items: stretch;
-  margin: 20px 0;
+  max-width: 360px;
+  margin: 20px auto;
   border: 2px solid #c4b99a;
   border-radius: 12px;
   box-shadow:
