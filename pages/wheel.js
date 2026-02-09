@@ -171,30 +171,35 @@ function drawWheel(rotation = 0) {
     ctx.lineWidth = 2;
     ctx.stroke();
 
-    // Draw label
+    // Draw label along the radius
     const midAngle = startAngle + sliceAngle / 2;
-    const labelRadius = radius * 0.65;
+    const labelRadius = radius * 0.62;
     const x = centerX + Math.cos(midAngle) * labelRadius;
     const y = centerY + Math.sin(midAngle) * labelRadius;
 
-    ctx.save();
-    ctx.translate(x, y);
-    ctx.rotate(midAngle + Math.PI / 2);
-
-    // Only show name if slice is big enough
     if (sliceAngle > 0.15) {
+      ctx.save();
+      ctx.translate(x, y);
+
+      // Orient text along the radius, flip on the left side so it's never upside down
+      const norm = ((midAngle % (Math.PI * 2)) + Math.PI * 2) % (Math.PI * 2);
+      if (norm > Math.PI / 2 && norm < Math.PI * 3 / 2) {
+        ctx.rotate(midAngle + Math.PI);
+      } else {
+        ctx.rotate(midAngle);
+      }
+
       ctx.fillStyle = "#fff";
-      ctx.font = "bold 12px system-ui";
+      ctx.font = "bold 13px system-ui";
       ctx.textAlign = "center";
       ctx.textBaseline = "middle";
 
-      // Truncate long names
       let name = p.display_name;
-      if (name.length > 12) name = name.slice(0, 10) + "...";
+      if (name.length > 14) name = name.slice(0, 12) + "...";
       ctx.fillText(name, 0, 0);
-    }
 
-    ctx.restore();
+      ctx.restore();
+    }
 
     startAngle = endAngle;
   });
