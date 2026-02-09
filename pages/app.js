@@ -299,31 +299,9 @@ function renderTickets() {
 
   // Theme the ticket to match team color
   const wrap = qs("ticketSection");
-  const label = qs("ticketsLabel");
-  const breakdown = qs("ticketBreakdown");
-  const stub = wrap.querySelector(".ticket-stub");
-  if (currentTeam === "red") {
-    el.style.color = "#dc2626";
-    label.style.color = "#dc2626";
-    breakdown.style.color = "#b91c1c";
-    wrap.style.borderColor = "rgba(220, 38, 38, 0.4)";
-    wrap.style.background = "rgba(254, 226, 226, 0.5)";
-    stub.style.borderLeftColor = "rgba(220, 38, 38, 0.25)";
-  } else if (currentTeam === "blue") {
-    el.style.color = "#2563eb";
-    label.style.color = "#2563eb";
-    breakdown.style.color = "#1d4ed8";
-    wrap.style.borderColor = "rgba(37, 99, 235, 0.4)";
-    wrap.style.background = "rgba(219, 234, 254, 0.5)";
-    stub.style.borderLeftColor = "rgba(37, 99, 235, 0.25)";
-  } else {
-    el.style.color = "#1a1a1a";
-    label.style.color = "#1a1a1a";
-    breakdown.style.color = "#666";
-    wrap.style.borderColor = "#d4d4d4";
-    wrap.style.background = "#f9f9f9";
-    stub.style.borderLeftColor = "rgba(0, 0, 0, 0.15)";
-  }
+  wrap.classList.remove("team-red", "team-blue");
+  if (currentTeam === "red") wrap.classList.add("team-red");
+  else if (currentTeam === "blue") wrap.classList.add("team-blue");
 
   if (total !== prev) {
     el.classList.remove("bump");
