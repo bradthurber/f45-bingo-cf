@@ -91,11 +91,17 @@ function getAvailableWeeks() {
 }
 
 function loadWeek() {
-  currentWeek = getCurrentChallengeWeek();
+  const saved = localStorage.getItem(LS_WEEK);
+  if (saved && getAvailableWeeks().includes(saved)) {
+    currentWeek = saved;
+  } else {
+    currentWeek = getCurrentChallengeWeek();
+  }
 }
 
 function saveWeek(week) {
   currentWeek = week;
+  localStorage.setItem(LS_WEEK, week);
   loadMask();
 }
 
