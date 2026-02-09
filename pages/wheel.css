@@ -31,45 +31,39 @@ h3 {
   color: #1a1a1a;
 }
 
-.week-display {
-  font-size: 16px;
-  font-weight: 700;
-  color: #666;
-  margin-bottom: 24px;
-}
 
 .hidden {
   display: none !important;
 }
 
-/* Auth gate */
-.auth-gate {
-  background: #f5f5f5;
-  border-radius: 12px;
-  padding: 24px;
-  margin-top: 24px;
+/* Week picker */
+.wheel-week-picker {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 24px;
 }
 
-.auth-gate p {
-  margin: 0 0 16px 0;
-  color: #666;
-}
-
-.input {
-  width: 100%;
-  padding: 14px 16px;
-  font-size: 16px;
-  border-radius: 12px;
+.wheel-week-tab {
+  padding: 8px 16px;
+  border-radius: 20px;
   border: 2px solid #e5e5e5;
-  background: #fff;
-  color: #1a1a1a;
-  margin-bottom: 12px;
-  text-align: center;
+  background: #f5f5f5;
+  color: #666;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
 }
 
-.input:focus {
-  outline: none;
+.wheel-week-tab.active {
+  background: #1a1a1a;
   border-color: #1a1a1a;
+  color: #fff;
+}
+
+.wheel-week-tab:active {
+  opacity: 0.8;
 }
 
 .btn {

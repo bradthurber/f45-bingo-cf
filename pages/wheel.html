@@ -9,18 +9,9 @@
 <body>
   <div class="container">
     <h1>Raffle Wheel</h1>
-    <div id="weekDisplay" class="week-display"></div>
+    <div id="weekPicker" class="wheel-week-picker"></div>
 
-    <!-- Auth gate -->
-    <div id="authGate" class="auth-gate">
-      <p>Enter the studio code to access the raffle wheel.</p>
-      <input type="password" id="studioCode" class="input" placeholder="Studio code" />
-      <button id="authBtn" class="btn primary">Enter</button>
-      <div id="authError" class="error"></div>
-    </div>
-
-    <!-- Wheel section (hidden until auth) -->
-    <div id="wheelSection" class="wheel-section hidden">
+    <div id="wheelSection" class="wheel-section">
       <div class="wheel-container">
         <div class="pointer"></div>
         <canvas id="wheelCanvas" width="400" height="400"></canvas>

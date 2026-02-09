@@ -9,12 +9,7 @@ let isSpinning = false;
 let currentWinner = null;
 
 // Elements
-const authGate = document.getElementById("authGate");
-const wheelSection = document.getElementById("wheelSection");
-const studioCodeInput = document.getElementById("studioCode");
-const authBtn = document.getElementById("authBtn");
-const authError = document.getElementById("authError");
-const weekDisplay = document.getElementById("weekDisplay");
+const weekPicker = document.getElementById("weekPicker");
 const canvas = document.getElementById("wheelCanvas");
 const ctx = canvas.getContext("2d");
 const spinBtn = document.getElementById("spinBtn");
@@ -38,54 +33,59 @@ const COLORS = [
 
 // Init
 document.addEventListener("DOMContentLoaded", () => {
-  currentWeek = getCurrentChallengeWeek();
-  weekDisplay.textContent = `Week ${formatWeek(currentWeek)}`;
-
-  authBtn.addEventListener("click", authenticate);
-  studioCodeInput.addEventListener("keypress", e => {
-    if (e.key === "Enter") authenticate();
-  });
+  currentWeek = getRaffleDefaultWeek();
+  renderWeekPicker();
 
   spinBtn.addEventListener("click", spin);
   removeBtn.addEventListener("click", removeWinnerAndRespin);
   resetBtn.addEventListener("click", resetAll);
   refreshBtn.addEventListener("click", loadParticipants);
+
+  loadParticipants();
 });
 
-async function authenticate() {
-  const code = studioCodeInput.value.trim();
-  if (!code) {
-    authError.textContent = "Please enter the studio code.";
-    return;
+function getRaffleDefaultWeek() {
+  const current = getCurrentChallengeWeek();
+  const match = current.match(/week(\d+)/);
+  const num = match ? parseInt(match[1], 10) : 1;
+  if (num <= 1) return "week1";
+  return `week${num - 1}`;
+}
+
+function getAvailableWeeks() {
+  const current = getCurrentChallengeWeek();
+  const match = current.match(/week(\d+)/);
+  const num = match ? parseInt(match[1], 10) : 1;
+  const weeks = [];
+  for (let i = 1; i <= num; i++) {
+    weeks.push(`week${i}`);
   }
+  return weeks;
+}
 
-  authError.textContent = "";
-  authBtn.disabled = true;
-  authBtn.textContent = "Checking...";
-
-  try {
-    // Verify code by trying to access stats endpoint with it
-    const res = await fetch(`${API_BASE}/api/leaderboard?week=${encodeURIComponent(currentWeek)}`, {
-      headers: { "x-studio-code": code }
-    });
-
-    if (!res.ok) {
-      throw new Error("Invalid code");
-    }
-
-    // Store code for future requests
-    sessionStorage.setItem("wheel_studio_code", code);
-
-    // Show wheel section
-    authGate.classList.add("hidden");
-    wheelSection.classList.remove("hidden");
-
-    await loadParticipants();
-  } catch (err) {
-    authError.textContent = "Invalid studio code. Please try again.";
-    authBtn.disabled = false;
-    authBtn.textContent = "Enter";
+function renderWeekPicker() {
+  const weeks = getAvailableWeeks();
+  weekPicker.innerHTML = "";
+  for (const week of weeks) {
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "wheel-week-tab" + (week === currentWeek ? " active" : "");
+    btn.textContent = "Week " + week.match(/\d+/)[0];
+    btn.addEventListener("click", () => switchWeek(week));
+    weekPicker.appendChild(btn);
   }
+}
+
+function switchWeek(week) {
+  if (week === currentWeek) return;
+  currentWeek = week;
+  removedWinners = [];
+  currentWinner = null;
+  winnerDiv.classList.add("hidden");
+  removeBtn.classList.add("hidden");
+  removedSection.classList.add("hidden");
+  renderWeekPicker();
+  loadParticipants();
 }
 
 async function loadParticipants() {
