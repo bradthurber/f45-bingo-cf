@@ -48,55 +48,6 @@ function formatWeek(weekId) {
   return weekId;
 }
 
-function getTheme() {
-  const themes = [
-    { m: 2,  d: 14, name: "Valentine's Day", emojis: "\u2764\uFE0F,\uD83D\uDC95,\uD83C\uDF39,\uD83D\uDC98,\uD83C\uDF6B,\uD83D\uDC9D", bgClass: "theme-valentines", banner: "\u2764\uFE0F Valentine's Day \u2764\uFE0F" },
-    { m: 3,  d: 9,  name: "Pajama Day",      emojis: "\uD83D\uDE34,\uD83C\uDF19,\u2B50,\uD83D\uDCA4,\uD83E\uDDF8",           bgClass: "theme-pajama",     banner: "\uD83D\uDE34 Pajama Day \uD83C\uDF19" },
-    { m: 3,  d: 10, name: "Neon Day",         emojis: "\uD83D\uDC9A,\uD83D\uDC9B,\uD83D\uDC9C,\uD83D\uDFE2,\uD83D\uDFE1",    bgClass: "theme-neon",       banner: "\uD83D\uDC9A Neon Day \uD83D\uDC9B", dark: true },
-    { m: 3,  d: 11, name: "Mismatch Day",     emojis: "\uD83E\uDDE9,\uD83C\uDFA8,\uD83D\uDD34,\uD83D\uDFE2,\uD83D\uDD35,\uD83D\uDFE1", bgClass: "theme-mismatch",   banner: "\uD83E\uDDE9 Mismatch Day \uD83C\uDFA8" },
-    { m: 3,  d: 12, name: "Groutfit Day",     emojis: "\u26AA,\uD83E\uDE76,\u2B1C",                                              bgClass: "theme-groutfit",   banner: "\u26AA Groutfit Day \u26AA" },
-    { m: 3,  d: 13, name: "Fun Socks",        emojis: "\uD83E\uDDE6,\uD83C\uDF08,\uD83C\uDF89,\u2728",                          bgClass: "theme-socks",      banner: "\uD83E\uDDE6 Fun Socks \uD83C\uDF08" },
-    { m: 3,  d: 14, name: "F45 Swag",         emojis: "\uD83D\uDCAA,\uD83C\uDFCB\uFE0F,\uD83D\uDD25",                           bgClass: "theme-swag",       banner: "\uD83D\uDCAA F45 Swag Day \uD83D\uDD25", dark: true },
-    { m: 3,  d: 15, name: "Sports Team",      emojis: "\u26BD,\uD83C\uDFC0,\uD83C\uDFC8,\u26BE,\uD83C\uDFC6",                   bgClass: "theme-sports",     banner: "\uD83C\uDFC6 Sports Team Day \uD83C\uDFC8", dark: true },
-  ];
-
-  const now = new Date();
-  const m = now.getMonth() + 1;
-  const d = now.getDate();
-  return themes.find(t => t.m === m && t.d === d) || null;
-}
-
-function applyTheme(theme) {
-  if (!theme) return;
-
-  document.body.classList.add(theme.bgClass);
-  if (theme.dark) document.body.classList.add("theme-dark");
-
-  // Banner
-  const banner = document.createElement("div");
-  banner.className = "theme-banner";
-  banner.textContent = theme.banner;
-  const header = document.querySelector(".header");
-  header.parentNode.insertBefore(banner, header.nextSibling);
-
-  // Floating emojis
-  const emojiArr = theme.emojis.split(",");
-  const container = document.createElement("div");
-  container.className = "theme-emojis";
-  for (let i = 0; i < 18; i++) {
-    const span = document.createElement("span");
-    span.className = "theme-emoji";
-    span.textContent = emojiArr[i % emojiArr.length];
-    span.style.left = (Math.random() * 94 + 3) + "%";
-    span.style.top = (Math.random() * 90 + 5) + "%";
-    span.style.animationDelay = (Math.random() * 6) + "s";
-    span.style.animationDuration = (8 + Math.random() * 6) + "s";
-    span.style.fontSize = (16 + Math.random() * 18) + "px";
-    container.appendChild(span);
-  }
-  document.body.appendChild(container);
-}
-
 /* ===========================
    WEEK HANDLING
 =========================== */
@@ -711,8 +662,6 @@ async function scanImage(file) {
 =========================== */
 
 window.addEventListener("DOMContentLoaded", () => {
-  applyTheme(getTheme());
-
   loadWeek();
   loadName();
   loadMask();
